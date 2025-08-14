@@ -135,8 +135,80 @@ create table if not exists public.profiles (
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+-- Enable RLS and add policies for row ownership before production.
+alter table profiles enable row level security;
+create policy "Can view own profile data." on profiles for select using (auth.uid() = id);
+create policy "Can update own profile data." on profiles for update using (auth.uid() = id);
 
--- (Recommended) Enable RLS and add policies for row ownership before production.
+```
+This trigger automatically creates a profile entry when a new user signs up via Supabase Auth.
+```sql
+-- Create a tigger to Automatically create a profile entry
+create function public.handle_new_user() 
+returns trigger as $$
+begin
+  insert into public.users (id, full_name, avatar_url)
+  values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
+  return new;
+end;
+$$ language plpgsql security definer;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+
+```
+
+Optional Profiles to Auth User sync trigger. This is really Helpful to sync the Auth User when profile information Changes Through the Dashboard 
+```sql
+CREATE OR REPLACE FUNCTION public.sync_profile_to_auth_user()
+  RETURNS trigger
+  LANGUAGE plpgsql
+  SECURITY DEFINER
+AS $$
+BEGIN
+  -- Only run when one of these really changed
+  IF  OLD.full_name   IS DISTINCT FROM NEW.full_name
+   OR OLD.avatar_url  IS DISTINCT FROM NEW.avatar_url
+   OR OLD.phone       IS DISTINCT FROM NEW.phone
+  THEN
+    UPDATE auth.users
+    SET
+      -- merge in the new full_name & avatar_url into the JSON metadata
+      raw_user_meta_data = (
+        (
+          jsonb_set(
+            jsonb_set(
+              COALESCE(raw_user_meta_data::jsonb, '{}'::jsonb),
+              '{full_name}',
+              to_jsonb(NEW.full_name),
+              true
+            ),
+            '{avatar_url}',
+            to_jsonb(NEW.avatar_url),
+            true
+          )
+        )::json
+      ),
+      -- update the phone column on auth.users too
+      phone = NEW.phone
+    WHERE id = NEW.id;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+-- 3. Wire up the trigger on your profiles table
+CREATE TRIGGER on_profile_updated
+  AFTER UPDATE ON public.profiles
+  FOR EACH ROW
+  WHEN (
+    OLD.full_name  IS DISTINCT FROM NEW.full_name
+ OR OLD.avatar_url IS DISTINCT FROM NEW.avatar_url
+ OR OLD.phone      IS DISTINCT FROM NEW.phone
+  )
+  EXECUTE FUNCTION public.sync_profile_to_auth_user();
+
 ```
 
 ---
