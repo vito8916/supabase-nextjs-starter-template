@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "../ui/form";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { UpdatePasswordFormValues, updatePasswordSchema } from "@/lib/validations-schemas/auth";
 import { updatePasswordAction } from "@/app/actions/auth/auth-actions";
@@ -17,8 +17,7 @@ import Link from "next/link";
 
 export function UpdatePasswordForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
     const [success, setSuccess] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const router = useRouter();
@@ -32,18 +31,10 @@ export function UpdatePasswordForm({ className, ...props }: React.ComponentProps
     });
 
     async function onSubmit(data: UpdatePasswordFormValues) {
-        setIsLoading(true);
-        setError(null);
-
-        const formData = new FormData();
-        formData.append("password", data.password);
-        formData.append("confirmPassword", data.confirmPassword);
-
         try {
-            const result = await updatePasswordAction(formData);
+            const result = await updatePasswordAction(data);
             if (result.error) {
                 toast.error(result.error);
-                setError(result.error);
                 return;
             }
             toast.success("Password updated successfully");
@@ -53,9 +44,6 @@ export function UpdatePasswordForm({ className, ...props }: React.ComponentProps
             router.push("/dashboard");
         } catch {
             toast.error("Something went wrong. Please try again.");
-        } finally {
-            form.reset();
-            setIsLoading(false);
         }
     }
 
@@ -83,12 +71,6 @@ export function UpdatePasswordForm({ className, ...props }: React.ComponentProps
                     ) : (
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                                {error && (
-                                    <div className="p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
-                                        {error}
-                                    </div>
-                                )}
-
                                 <FormField
                                     control={form.control}
                                     name="password"
@@ -100,7 +82,7 @@ export function UpdatePasswordForm({ className, ...props }: React.ComponentProps
                                                     <Input
                                                         type={showPassword ? "text" : "password"}
                                                         placeholder="Enter your new password"
-                                                        disabled={isLoading}
+                                                        disabled={form.formState.isSubmitting}
                                                         {...field}
                                                     />
                                                     <Button
@@ -109,7 +91,7 @@ export function UpdatePasswordForm({ className, ...props }: React.ComponentProps
                                                         size="sm"
                                                         className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                                                         onClick={() => setShowPassword(!showPassword)}
-                                                        disabled={isLoading}
+                                                        disabled={form.formState.isSubmitting}
                                                         aria-label={showPassword ? "Hide password" : "Show password"}>
                                                         {showPassword ? (
                                                             <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -135,7 +117,7 @@ export function UpdatePasswordForm({ className, ...props }: React.ComponentProps
                                                     <Input
                                                         type={showConfirmPassword ? "text" : "password"}
                                                         placeholder="Confirm your new password"
-                                                        disabled={isLoading}
+                                                        disabled={form.formState.isSubmitting}
                                                         {...field}
                                                     />
                                                     <Button
@@ -144,7 +126,7 @@ export function UpdatePasswordForm({ className, ...props }: React.ComponentProps
                                                         size="sm"
                                                         className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                                                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                                        disabled={isLoading}
+                                                        disabled={form.formState.isSubmitting}
                                                         aria-label={
                                                             showConfirmPassword ? "Hide password" : "Show password"
                                                         }>
@@ -161,8 +143,8 @@ export function UpdatePasswordForm({ className, ...props }: React.ComponentProps
                                     )}
                                 />
 
-                                <Button type="submit" className="w-full" disabled={isLoading}>
-                                    {isLoading ? (
+                                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                                    {form.formState.isSubmitting ? (
                                         <>
                                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                             Updating...

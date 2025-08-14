@@ -1,36 +1,196 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## SupaNext Starter Kit 2
 
-## Getting Started
+Build your next SaaS or internal tool with ease. SupaNext Starter Kit 2 combines a production-ready Next.js App Router setup with Supabase authentication, a clean dashboard shell, opinionated UI components, and a complete settings experience so you can ship faster.
 
-First, run the development server:
+### Highlights
+- **End-to-end auth**: Email/password sign up, sign in, password reset, update password, and email OTP confirmation via Supabase.
+- **Protected routes**: Middleware-enforced route protection with smart redirects.
+- **Dashboard shell**: Responsive sidebar, breadcrumbs, and header out of the box.
+- **Account settings**: Profile and password forms powered by React Hook Form and Zod.
+- **Theme + toasts**: Dark/light mode with `next-themes` and app-wide toasts via `sonner`.
+- **Type-safe**: TypeScript-first with strict, readable code.
 
+### Tech Stack
+- **Core**: Next.js 15 (App Router), React 19, TypeScript 5
+- **Auth + Data**: Supabase (`@supabase/ssr`, `@supabase/supabase-js`)
+- **UI/UX**: Tailwind CSS v4, shadcn/ui primitives (Radix UI), `lucide-react`, `sonner`, `next-themes`
+- **Forms + Validation**: React Hook Form, Zod
+- **Testing**: Vitest
+
+---
+
+## Quick Start
+
+### 1) Prerequisites
+- Node.js 18+ (LTS recommended)
+- A Supabase project (free tier is fine)
+
+### 2) Install dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+# or: pnpm install | yarn | bun install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3) Configure environment variables
+Create a `.env.local` in the project root:
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your_supabase_anon_key
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Optional but recommended for correct redirects in auth flows
+NEXT_PUBLIC_SITE_URL=http://localhost:3002
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Notes:
+- Only public variables are required because this app uses Supabase’s SSR helpers which manage cookies securely.
+- If `NEXT_PUBLIC_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` is missing, auth middleware gracefully no-ops to let you explore the UI.
 
-## Learn More
+### 4) Run the app
+```bash
+npm run dev
+```
+The dev server runs on `http://localhost:3002` (see `package.json`).
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## What You Get
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Authentication
+- Email/password sign up and sign in
+- Forgot password and update password flows
+- Email OTP confirmation handler at `app/auth/confirm/route.ts`
+- SSR/CSR-safe Supabase clients: `lib/supabase/server.ts` and `lib/supabase/client.ts`
 
-## Deploy on Vercel
+### Route Protection
+- Centralized logic in `lib/supabase/middleware.ts` wired through `middleware.ts`
+- Public routes: `/`, `/login`, `/sign-up`, `/forgot-password`, `/update-password`, `/sign-up-success`, `/error`
+- Unauthenticated access to protected paths redirects to `/login`
+- Authenticated users navigating to `/login` or `/sign-up` are redirected to `/dashboard`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Dashboard Shell
+- App sidebar, breadcrumbs, header, and responsive layout in `app/(protected)/layout.tsx`
+- Ready-to-extend `app/(protected)/dashboard/page.tsx`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Settings Experience
+- `Profile` tab: Update `full_name` and `bio` (stored in Supabase auth user metadata)
+- `Password` tab: Update password with Zod-enforced strength checks
+- `Theme` tab: Toggle dark/light mode via `next-themes`
+
+### Landing Page
+- Clean hero, navbar, and footer under `components/landing/*` and `app/page.tsx`
+
+---
+
+## Project Structure
+
+```
+app/
+  (auth)/                 # Public auth pages (login, sign-up, forgot/update password)
+  (protected)/            # Authenticated-only layouts and pages (dashboard, settings)
+  actions/                # Server Actions (auth, settings, users)
+  auth/confirm/route.ts   # Email OTP confirmation handler
+components/
+  auth/                   # Auth forms
+  dashboard/              # Sidebar, breadcrumbs, user nav
+  settings/               # Profile, password, appearance forms
+  ui/                     # shadcn/ui components
+lib/
+  supabase/               # SSR/CSR clients and auth-aware middleware
+  validations-schemas/    # Zod schemas for auth and settings
+  utils.ts                # Helpers (classnames, date formatting, etc.)
+```
+
+---
+
+## Environment Variables
+
+- **Required**
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` (Supabase anon key)
+
+- **Recommended**
+  - `NEXT_PUBLIC_SITE_URL` (used to craft redirect URLs in auth flows)
+
+If you run without the required Supabase vars, middleware skips auth enforcement so you can explore the UI.
+
+---
+
+## Supabase Notes
+
+This starter primarily uses Supabase Auth and stores user-facing profile fields in the auth user’s metadata. There is also an optional `profiles` table utility in `app/actions/users-actions.ts` you can adopt if you prefer a dedicated table for richer profiles.
+
+Optional example table (adjust to your needs):
+```sql
+-- Create a profiles table linked to auth.users
+create table if not exists public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  full_name text,
+  avatar_url text,
+  bio text,
+  status text default 'active',
+  email text,
+  phone text,
+  stripe_customer_id text,
+  stripe_subscription_id text,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+-- (Recommended) Enable RLS and add policies for row ownership before production.
+```
+
+---
+
+## Scripts
+
+- `npm run dev` – Start dev server with Turbopack on port 3002
+- `npm run build` – Production build
+- `npm run start` – Run production build
+- `npm run lint` – Lint with ESLint
+- `npm run test` / `npm run test:watch` – Run Vitest
+
+---
+
+## Routing Overview
+
+- Public
+  - `/` – Marketing/landing
+  - `/login`, `/sign-up`, `/forgot-password`, `/update-password`, `/sign-up-success`, `/error`
+
+- Protected
+  - `/dashboard`
+  - `/settings` (Profile, Password, Theme tabs)
+
+Auth is enforced by middleware; see `lib/supabase/middleware.ts`.
+
+---
+
+## Extending the Starter
+
+- **Add social auth**: Wire Supabase OAuth providers and connect to the existing auth UI buttons.
+- **Persist richer profiles**: Adopt the `profiles` table and store additional fields beyond auth metadata.
+- **Add billing**: Integrate Stripe and persist IDs on the user record or `profiles`.
+- **Enhance testing**: Flesh out Vitest with unit and integration tests for server actions.
+
+---
+
+## Deployment
+
+This project works great on Vercel. Set the same environment variables in your hosting provider:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`
+- `NEXT_PUBLIC_SITE_URL` (point to your live URL)
+
+Middleware and Supabase SSR helpers are edge-friendly, but review your plan/limits for production.
+
+---
+
+## Contributing
+
+Issues and PRs are welcome. Please keep changes focused and consistent with the code style. Run `npm run lint` and `npm run test` before submitting.
+
+---
+
+## License
+
+Add your preferred license (e.g., MIT) in a `LICENSE` file at the project root.

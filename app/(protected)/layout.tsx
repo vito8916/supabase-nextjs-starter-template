@@ -3,6 +3,10 @@ import BreadcrumbDashboard from "@/components/dashboard/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
+/**
+ * Shared layout for authenticated areas (dashboard, settings, etc.).
+ * Provides sidebar, header with breadcrumbs, and main content region.
+ */
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
         <SidebarProvider>

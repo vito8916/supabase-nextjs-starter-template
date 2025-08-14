@@ -15,9 +15,7 @@ import { forgotPasswordAction } from "@/app/actions/auth/auth-actions";
 import { toast } from "sonner";
 
 export function ForgotPasswordForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-    const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<ForgotPasswordFormValues>({
         resolver: zodResolver(forgotPasswordSchema),
@@ -27,17 +25,11 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
     });
 
     async function onSubmit(data: ForgotPasswordFormValues) {
-        setIsLoading(true);
-        setError(null);
-
         try {
-            const formData = new FormData();
-            formData.append("email", data.email);
-            const result = await forgotPasswordAction(formData);
+            const result = await forgotPasswordAction(data);
 
             if (result.error) {
                 toast.error(result.error);
-                setError(result.error);
                 return;
             }
 
@@ -46,10 +38,6 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
             setSuccess(true);
         } catch {
             toast.error("Something went wrong. Please try again.");
-            setError("Something went wrong. Please try again.");
-        } finally {
-            form.reset();
-            setIsLoading(false);
         }
     }
 
@@ -80,12 +68,6 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
                     ) : (
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                                {error && (
-                                    <div className="p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
-                                        {error}
-                                    </div>
-                                )}
-
                                 <FormField
                                     control={form.control}
                                     name="email"
@@ -96,7 +78,7 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
                                                 <Input
                                                     type="email"
                                                     placeholder="m@example.com"
-                                                    disabled={isLoading}
+                                                    disabled={form.formState.isSubmitting}
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -105,8 +87,8 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
                                     )}
                                 />
 
-                                <Button type="submit" className="w-full" disabled={isLoading}>
-                                    {isLoading ? (
+                                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                                    {form.formState.isSubmitting ? (
                                         <>
                                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                             Sending...

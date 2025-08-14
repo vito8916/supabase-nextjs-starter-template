@@ -6,6 +6,10 @@ import { cookies } from "next/headers";
  * global variable. Always create a new client within each function when using
  * it.
  */
+/**
+ * Create a Supabase client bound to the current request's cookies.
+ * Safe for Server Components, Route Handlers, and Server Actions.
+ */
 export async function createClient() {
   const cookieStore = await cookies();
 

@@ -17,11 +17,9 @@ import { signInAction } from "@/app/actions/auth/auth-actions";
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
-    // 1. Define your form.
+    // Initialize form with Zod validation.
     const form = useForm<SignInFormValues>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
@@ -30,33 +28,23 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         },
     });
 
-    // 2. Define a submit handler.
+    // Submit handler calls server action and handles UI feedback.
     async function onSubmit(data: SignInFormValues) {
-        setIsLoading(true);
-        setError(null);
-
         try {
-            const formData = new FormData();
-            formData.append("email", data.email);
-            formData.append("password", data.password);
-
-            const result = await signInAction(formData);
+            const result = await signInAction(data);
 
             if (result.error) {
                 toast.error(result.error);
-                setError(result.error);
                 return;
             }
 
             if (result.data) {
+                // On success, inform the user and navigate to dashboard.
                 toast.success("Login successful");
                 router.push("/dashboard");
             }
         } catch {
             toast.error("Something went wrong. Please try again.");
-            setError("Something went wrong. Please try again.");
-        } finally {
-            setIsLoading(false);
         }
     }
 
@@ -70,12 +58,6 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                 <CardContent className="grid gap-6">
                 <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                                {error && (
-                                    <div className="p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
-                                        {error}
-                                    </div>
-                                )}
-                                
                                 <FormField
                                     control={form.control}
                                     name="email"
@@ -86,7 +68,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                                                 <Input 
                                                     type="email"
                                                     placeholder="m@example.com" 
-                                                    disabled={isLoading}
+                                                    disabled={form.formState.isSubmitting}
                                                     {...field} 
                                                 />
                                             </FormControl>
@@ -114,7 +96,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                                                     <Input
                                                         type={showPassword ? "text" : "password"}
                                                         placeholder="Enter your password"
-                                                        disabled={isLoading}
+                                                        disabled={form.formState.isSubmitting}
                                                         {...field}
                                                     />
                                                     <Button
@@ -123,7 +105,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                                                         size="sm"
                                                         className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                                                         onClick={() => setShowPassword(!showPassword)}
-                                                        disabled={isLoading}
+                                                        disabled={form.formState.isSubmitting}
                                                         aria-label={showPassword ? "Hide password" : "Show password"}
                                                     >
                                                         {showPassword ? (
@@ -142,9 +124,9 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                                 <Button 
                                     type="submit" 
                                     className="w-full" 
-                                    disabled={isLoading}
+                                    disabled={form.formState.isSubmitting}
                                 >
-                                    {isLoading ? (
+                                    {form.formState.isSubmitting ? (
                                         <>
                                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                             Signing in...
@@ -168,11 +150,11 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                         </div>
                         
                         <div className="grid grid-cols-2 gap-4">
-                            <Button variant="outline" disabled={isLoading}>
+                            <Button variant="outline" disabled={form.formState.isSubmitting}>
                                 <GithubIcon className="mr-2 h-4 w-4" />
                                 GitHub
                             </Button>
-                            <Button variant="outline" disabled={isLoading}>
+                            <Button variant="outline" disabled={form.formState.isSubmitting}>
                                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                                     <path
                                         d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"

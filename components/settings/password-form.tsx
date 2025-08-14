@@ -28,6 +28,7 @@ const defaultValues: Partial<PasswordFormValues> = {
 export function PasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
 
+  // Initialize form with Zod schema and default values.
   const form = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordFormSchema),
     defaultValues,

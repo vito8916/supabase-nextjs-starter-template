@@ -4,6 +4,10 @@ import { createClient } from "@/lib/supabase/server";
 import { passwordFormSchema, PasswordFormValues, ProfileFormValues, profileSchema } from "@/lib/validations-schemas/settings";
 import { revalidatePath } from "next/cache";
 
+/**
+ * Update profile metadata for the authenticated user.
+ * @param values - Validated profile form values.
+ */
 export async function updateProfileAction(values: ProfileFormValues) {
     const supabase = await createClient();
     // Get the current user
@@ -34,6 +38,10 @@ export async function updateProfileAction(values: ProfileFormValues) {
     return { success: "Profile updated successfully" };
 }
 
+/**
+ * Update the authenticated user's password.
+ * @param values - Validated password form values.
+ */
 export async function updatePasswordAction(values: PasswordFormValues) {
     const supabase = await createClient();
     // Get the current user

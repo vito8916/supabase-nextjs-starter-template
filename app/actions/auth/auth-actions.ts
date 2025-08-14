@@ -1,18 +1,32 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { forgotPasswordSchema, signInSchema, signUpSchema, updatePasswordSchema } from "@/lib/validations-schemas/auth";
+import {
+  forgotPasswordSchema,
+  signInSchema,
+  signUpSchema,
+  updatePasswordSchema,
+  type ForgotPasswordFormValues,
+  type SignInFormValues,
+  type SignUpFormValues,
+  type UpdatePasswordFormValues,
+} from "@/lib/validations-schemas/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
+/**
+ * Get the currently authenticated user (or null).
+ */
 export const getAuthUser = cache(async () => {
     const supabase = await createClient();
 
+    // Retrieve the current auth user from Supabase.
     const { data: { user }, error } = await supabase.auth.getUser();
     if (!user) return null;
 
     if (error) {
+      // Log and return null to avoid throwing in server actions.
       console.error('Error fetching user:', error);
       return null;
     }
@@ -20,16 +34,17 @@ export const getAuthUser = cache(async () => {
     return user;
   });
 
-export async function signUpAction(formData: FormData) {
+/**
+ * Sign up a new user with email/password.
+ * @param values - Validated sign-up form values.
+ */
+export async function signUpAction(values: SignUpFormValues) {
     const supabase = await createClient();
     const headersList = await headers();
     const origin = headersList.get("origin") || process.env.NEXT_PUBLIC_SITE_URL;
 
-    const validatedFields = signUpSchema.safeParse({
-        fullName: formData.get("fullName"),
-        email: formData.get("email"),
-        password: formData.get("password"),
-    });
+    // Validate incoming values against Zod schema.
+    const validatedFields = signUpSchema.safeParse(values);
 
     if (!validatedFields.success) {
         return { error: "Invalid fields" };
@@ -37,6 +52,7 @@ export async function signUpAction(formData: FormData) {
 
     const { fullName, email, password } = validatedFields.data;
 
+    // Create user and attach basic profile metadata.
     const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -44,6 +60,7 @@ export async function signUpAction(formData: FormData) {
             data: {
                 full_name: fullName,
             },
+            // Email link redirect target after confirmation.
             emailRedirectTo: `${origin}/dashboard`,
         },
     });
@@ -55,13 +72,15 @@ export async function signUpAction(formData: FormData) {
     return { data };
 }
 
-export async function signInAction(formData: FormData) {
+/**
+ * Sign in an existing user with email/password.
+ * @param values - Validated sign-in form values.
+ */
+export async function signInAction(values: SignInFormValues) {
     const supabase = await createClient();
 
-    const validatedFields = signInSchema.safeParse({
-        email: formData.get("email"),
-        password: formData.get("password"),
-    });
+    // Validate incoming values against Zod schema.
+    const validatedFields = signInSchema.safeParse(values);
 
     if (!validatedFields.success) {
         return {
@@ -71,6 +90,7 @@ export async function signInAction(formData: FormData) {
 
     const { email, password } = validatedFields.data;
 
+    // Attempt sign-in with email/password.
     const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -85,20 +105,27 @@ export async function signInAction(formData: FormData) {
     return { data };
 }
 
+/**
+ * Sign out the current user and redirect to home.
+ */
 export async function signOutAction() {
     const supabase = await createClient();
+    // Clear session and navigate home.
     await supabase.auth.signOut();
     redirect("/");
 }
 
-export async function forgotPasswordAction(formData: FormData) {
+/**
+ * Send a password reset email.
+ * @param values - Validated forgot password form values.
+ */
+export async function forgotPasswordAction(values: ForgotPasswordFormValues) {
     const supabase = await createClient();
     const headersList = await headers();
     const origin = headersList.get("origin") || process.env.NEXT_PUBLIC_SITE_URL;
 
-    const validatedFields = forgotPasswordSchema.safeParse({
-        email: formData.get("email"),
-    });
+    // Validate email payload.
+    const validatedFields = forgotPasswordSchema.safeParse(values);
 
     if (!validatedFields.success) {
         return {
@@ -108,6 +135,7 @@ export async function forgotPasswordAction(formData: FormData) {
 
     const { email } = validatedFields.data;
 
+    // Send reset email with redirect back to the app.
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${origin}/update-password`,
     });
@@ -119,13 +147,15 @@ export async function forgotPasswordAction(formData: FormData) {
     return { data };
 }
 
-export async function updatePasswordAction(formData: FormData) {
+/**
+ * Update the authenticated user's password.
+ * @param values - Validated update password form values.
+ */
+export async function updatePasswordAction(values: UpdatePasswordFormValues) {
     const supabase = await createClient();
 
-    const validatedFields = updatePasswordSchema.safeParse({
-        password: formData.get("password"),
-        confirmPassword: formData.get("confirmPassword"),
-    });
+    // Validate new password fields.
+    const validatedFields = updatePasswordSchema.safeParse(values);
 
     if (!validatedFields.success) {
         return { error: "Invalid fields" };
@@ -137,6 +167,7 @@ export async function updatePasswordAction(formData: FormData) {
         return { error: "Passwords do not match" };
     }
 
+    // Commit the password change to Supabase auth.
     const { data, error } = await supabase.auth.updateUser({
         password: password as string,
     });

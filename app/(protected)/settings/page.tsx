@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { User } from '@supabase/supabase-js'
 
 export default async function SettingsPage() {
+  // Fetch the current user on the server to hydrate default values in forms.
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 

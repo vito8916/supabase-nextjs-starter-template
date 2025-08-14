@@ -24,6 +24,7 @@ import { User } from "@supabase/supabase-js";
 export function ProfileForm({ user }: { user: User }) {
   const router = useRouter(); 
   
+  // Initialize form with Zod schema and current user metadata.
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -36,7 +37,6 @@ export function ProfileForm({ user }: { user: User }) {
 
   async function onSubmit(values: ProfileFormValues) {
     try {
-      
       // Call the server action
       const result = await updateProfileAction(values);
       
@@ -52,6 +52,7 @@ export function ProfileForm({ user }: { user: User }) {
       console.error("Profile update error:", error);
       toast.error("Failed to update profile. Please try again later.");
     } finally {
+      // Ensure UI reflects updated metadata.
       router.refresh();
     }
   }

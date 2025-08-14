@@ -2,6 +2,12 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { hasEnvVars } from "../utils";
 
+/**
+ * Refresh Supabase session and enforce route protection.
+ * - Skips when required env vars are missing (for local exploration).
+ * - Redirects unauthenticated users from protected routes to /login.
+ * - Redirects authenticated users away from /login and /sign-up.
+ */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,

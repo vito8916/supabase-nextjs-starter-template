@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// General Profile Schema
+/** General profile schema for settings page. */
 export const profileSchema = z.object({
   fullName: z.string().min(1, "First name is required").max(50, "First name must be less than 50 characters").trim().toLowerCase(),
   email: z.string().email("Please enter a valid email address"),
@@ -8,7 +8,7 @@ export const profileSchema = z.object({
   bio: z.string().max(200, "Bio must be less than 200 characters").optional(),
 });
 
-// Password form schema
+/** Password update schema with strength and match checks. */
 export const passwordFormSchema = z
   .object({
     newPassword: z.string().min(8, {

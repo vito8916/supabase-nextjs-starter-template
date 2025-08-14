@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+/**
+ * Schemas for authentication-related forms.
+ */
 export const signInSchema = z.object({
     email: z.string().email("Please enter a valid email address").trim().toLowerCase(),
     password: z
