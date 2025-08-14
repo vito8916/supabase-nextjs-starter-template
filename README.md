@@ -1,6 +1,6 @@
 ## SupaNext Starter Kit 2
 
-Build your next SaaS or internal tool with ease. SupaNext Starter Kit 2 combines a production-ready Next.js App Router setup with Supabase authentication, a clean dashboard shell, opinionated UI components, and a complete settings experience so you can ship faster.
+Build your next SaaS or internal tool with ease. SupaNext Starter Kit 2 combines a production-ready Next.js App Router setup with Supabase authentication, a clean dashboard shell, ShadCN + Tailwind UI components, and a complete settings experience so you can ship faster.
 
 ### Highlights
 - **End-to-end auth**: Email/password sign up, sign in, password reset, update password, and email OTP confirmation via Supabase.

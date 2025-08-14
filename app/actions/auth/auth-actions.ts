@@ -106,6 +106,41 @@ export async function signInAction(values: SignInFormValues) {
 }
 
 /**
+ * Begin an OAuth sign-in flow for supported providers.
+ * Redirects the user to the provider's consent screen.
+ */
+export async function signInWithOAuthAction(
+  provider: "github" | "google",
+  nextPath?: string,
+) {
+  const supabase = await createClient();
+  const headersList = await headers();
+  const origin = headersList.get("origin") || process.env.NEXT_PUBLIC_SITE_URL;
+
+  const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent(
+    nextPath ?? "/dashboard",
+  )}`;
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo,
+    },
+  });
+
+  if (error) {
+    return { error: error.message } as const;
+  }
+
+  // If a URL is returned, return it so the client can navigate.
+  if (data?.url) {
+    return { url: data.url } as const;
+  }
+
+  return { error: "Unable to start OAuth flow" } as const;
+}
+
+/**
  * Sign out the current user and redirect to home.
  */
 export async function signOutAction() {
