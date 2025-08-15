@@ -10,7 +10,7 @@ export const hasEnvVars =
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
 
-  export function capitalizeText(text: string) {
+  export function capitalizeText(text: string = "User Name") {
     const words = text.split(" ")
     return words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")
   }
