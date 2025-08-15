@@ -2,6 +2,19 @@
 
 Build your next SaaS or internal tool with ease. SupaNext Starter Kit 2 combines a production-ready Next.js App Router setup with Supabase authentication, a clean dashboard shell, ShadCN + Tailwind UI components, and a complete settings experience so you can ship faster.
 
+When I adopted this technology stack, I had the idea of creating a template that would serve as a solid foundation for me, with the essentials that every project needs so I wouldn't waste time and could focus on more important things.
+
+I've used this template for a variety of applications, from my side projects to complex ones for the company I work for. Whether I have or my team uses Supabase as a BaaS, this template has saved us hours of work and also a lot of Claude Code Tokens 🤣, since we now have a foundation to start from and don't have to reinvent the wheel.
+
+Hope you Enjoy this template! 
+
+<img style="display: block; margin: 0 auto;" width="600" heigh="200"  alt="Supabase and Next js starter template" src="https://supabase-nextjs-starter-template.vercel.app/assets/images/preview.png"/>
+
+## 🔥 DEMO
+
+[VIEW DEMO](https://supabase-nextjs-starter-template.vercel.app)
+
+
 ### Highlights
 - **End-to-end auth**: Email/password sign up, sign in, password reset, update password, and email OTP confirmation via Supabase.
 - **Protected routes**: Middleware-enforced route protection with smart redirects.
@@ -78,6 +91,8 @@ The dev server runs on `http://localhost:3002` (see `package.json`).
 
 ### Landing Page
 - Clean hero, navbar, and footer under `components/landing/*` and `app/page.tsx`
+
+<img style="display: block; margin: 0 auto;" alt="previews" src="https://supabase-nextjs-starter-template.vercel.app/assets/images/previews.png"/>
 
 ---
 
@@ -255,6 +270,8 @@ This project works great on Vercel. Set the same environment variables in your h
 
 Middleware and Supabase SSR helpers are edge-friendly, but review your plan/limits for production.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvito8916%2Fsupabase-nextjs-starter-template)
+
 ---
 
 ## Contributing
@@ -265,4 +282,6 @@ Issues and PRs are welcome. Please keep changes focused and consistent with the 
 
 ## License
 
-Add your preferred license (e.g., MIT) in a `LICENSE` file at the project root.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
