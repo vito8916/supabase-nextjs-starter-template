@@ -72,7 +72,12 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
             <Card>
                 <CardHeader>
                     <CardTitle className="text-2xl">Login</CardTitle>
-                    <CardDescription>Enter your email below to login to your account</CardDescription>
+                    <CardDescription>
+                        Enter your email below to login to your account. <br /> <br />
+                        Testing account: <br />
+                        Email: test@vicbox.dev <br />
+                        Password: 12345678
+                    </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-6">
                 <Form {...form}>
