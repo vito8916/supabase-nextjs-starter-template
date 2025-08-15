@@ -34,9 +34,11 @@ export default function HeroSection() {
                             <Button asChild>
                                 <Link href="/login">Get Started</Link>
                             </Button>
-                            <Button variant="outline" className="group">
-                                Learn more
-                                <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                            <Button variant="outline" className="group" asChild>
+                                <Link href="https://github.com/vito8916/supabase-nextjs-starter-template" target="_blank">
+                                    GitHub Repo
+                                    <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                                </Link>
                             </Button>
                         </div>
                         <div className="mt-20 flex flex-col items-center gap-5">
