@@ -1,3 +1,4 @@
+import { ComponentProps } from "react"
 import {
   GalleryVerticalEnd,
 } from "lucide-react"
@@ -15,12 +16,12 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { getCurrentUser } from "@/app/actions/users-actions"
+import {getUserProfile} from "@/app/actions/settings/profile-actions";
 
-export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
 
     
-    const currentUser = await getCurrentUser();
+    const currentUser = await getUserProfile();
     if(!currentUser) {
         return null
     }

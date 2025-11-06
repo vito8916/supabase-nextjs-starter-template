@@ -4,12 +4,18 @@ import { ProfileForm } from '@/components/settings/profile-form'
 import { PasswordForm } from '@/components/settings/password-form'
 import { AppearanceForm } from '@/components/settings/appearance-form'
 import { createClient } from '@/lib/supabase/server'
-import { User } from '@supabase/supabase-js'
+import {getUserProfile} from "@/app/actions/settings/profile-actions";
+import {ProfileDTO} from "@/types/profile";
 
 export default async function SettingsPage() {
   // Fetch the current user on the server to hydrate default values in forms.
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+      throw new Error('User not authenticated');
+  }
+
+  const userProfileInfo = await getUserProfile();
 
   return (
     <div className="container mx-auto py-10 px-4">
@@ -36,7 +42,7 @@ export default async function SettingsPage() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <ProfileForm user={user as User} />
+                            <ProfileForm profileInfo={userProfileInfo as ProfileDTO} />
                         </CardContent>
                     </Card>
                 </TabsContent>

@@ -1,4 +1,3 @@
-import { getCurrentUser } from "@/app/actions/users-actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,11 +6,12 @@ import { capitalizeText, cn, getInitials } from "@/lib/utils";
 import { Mail, Shield, Calendar, Clock, ImageIcon } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { getAuthUser } from "@/app/actions/auth/auth-actions";
+import {getUserProfile} from "@/app/actions/settings/profile-actions";
 
 export default async function DashboardPage() {
 
     const user = await getAuthUser()
-    const userProfileInfo = await getCurrentUser()
+    const userProfileInfo = await getUserProfile()
 
     return (
         <div>
@@ -21,7 +21,7 @@ export default async function DashboardPage() {
                 <CardHeader className="pb-4">
                     <div className="flex items-center space-x-4">
                         <Avatar className="h-16 w-16">
-                            <AvatarImage src={userProfileInfo?.avatar_url} />
+                            <AvatarImage src={userProfileInfo?.avatar_url ?? ''} />
                             <AvatarFallback className="text-lg font-semibold bg-primary/10">
                                 {getInitials(user?.user_metadata?.full_name)}
                             </AvatarFallback>

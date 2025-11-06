@@ -16,21 +16,21 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { profileSchema, ProfileFormValues } from "@/lib/validations-schemas/settings";
-import { updateProfileAction } from "@/app/actions/settings/settings-actions";
+import { updateProfileAction } from "@/app/actions/settings/profile-actions";
 import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { User } from "@supabase/supabase-js";
+import {ProfileDTO} from "@/types/profile";
 
-export function ProfileForm({ user }: { user: User }) {
+export function ProfileForm({ profileInfo }: { profileInfo: ProfileDTO }) {
   const router = useRouter(); 
   
   // Initialize form with Zod schema and current user metadata.
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      fullName: user?.user_metadata.full_name || "",
-      email: user?.email || "",
-      bio: user?.user_metadata.bio || "",
+      fullName: profileInfo?.full_name || "",
+      email: profileInfo?.email || "",
+      bio: profileInfo?.bio || "",
     },
     mode: "onChange",
   });

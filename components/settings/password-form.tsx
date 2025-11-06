@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { passwordFormSchema, type PasswordFormValues } from "@/lib/validations-schemas/settings";
 import { useState } from "react";
-import { updatePasswordAction } from "@/app/actions/settings/settings-actions";
+import { updatePasswordAction } from "@/app/actions/settings/security-actions";
 import { LoaderCircle } from "lucide-react";
 
 // Default values for the form
