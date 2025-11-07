@@ -1,4 +1,4 @@
-import { ComponentProps } from "react"
+import React, { ComponentProps } from "react"
 import {
   GalleryVerticalEnd,
 } from "lucide-react"
@@ -17,6 +17,10 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import {getUserProfile} from "@/app/actions/settings/profile-actions";
+import Image from "next/image";
+import Logo from "@/public/supanext-logo.svg"
+import VicboxLogo from "@/components/vicbox-logo";
+
 
 export async function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
 
@@ -42,8 +46,8 @@ export async function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="#">
-                <GalleryVerticalEnd className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                  <VicboxLogo />
+                <span className="text-base font-semibold">SupaNext Kit2</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

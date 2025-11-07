@@ -36,7 +36,7 @@ export default async function DashboardPage() {
                                     Welcome back, {capitalizeText(user?.user_metadata.full_name)}
                                 </CardTitle>
                                 <Badge variant="outline"
-                                       className={cn(userProfileInfo?.status === 'active' ? 'bg-green-500/10' : 'bg-destructive/10', "text-xs")}>
+                                       className={cn(userProfileInfo?.status === 'active' ? 'bg-green-500/50 border-green-500/50' : 'bg-destructive/10', "text-xs")}>
                                     {userProfileInfo?.status}
                                 </Badge>
                             </div>
@@ -51,14 +51,6 @@ export default async function DashboardPage() {
                                 <Mail className="h-4 w-4 text-muted-foreground"/>
                                 <span className="text-muted-foreground">Email:</span>
                                 <span className="font-medium">{user?.email}</span>
-                            </div>
-
-                            <div className="flex items-center space-x-3 text-sm">
-                                <Shield className="h-4 w-4 text-muted-foreground"/>
-                                <span className="text-muted-foreground">User ID:</span>
-                                <code className="text-xs bg-muted px-2 py-1 rounded font-mono">
-                                    {user?.id}
-                                </code>
                             </div>
 
                             <div className="flex items-center space-x-3 text-sm">
