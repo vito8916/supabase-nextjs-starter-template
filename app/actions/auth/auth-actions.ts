@@ -14,6 +14,7 @@ import {
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
+import {logUserLogin} from "@/app/actions/user-logins/user-login-actions";
 
 /**
  * Get the currently authenticated user (or null).
@@ -97,10 +98,27 @@ export async function signInAction(values: SignInFormValues) {
     });
 
     if (error) {
+        await logUserLogin(
+            null,
+            email.split("@")[0], // username from email
+            email,
+            "failed",
+            error.message
+        );
         return {
             error: error.message,
         };
     }
+
+    // Log successful login
+    await logUserLogin(
+        data.user.id,
+        data.user.email?.split("@")[0] || "unknown",
+        data.user.email || email,
+        "success",
+        null,
+        null
+    );
 
     return { data };
 }
