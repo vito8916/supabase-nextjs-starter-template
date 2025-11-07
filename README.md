@@ -1,287 +1,181 @@
-## SupaNext Starter Kit 2
+# SupaNext Starter Kit 2
 
-Build your next SaaS or internal tool with ease. SupaNext Starter Kit 2 combines a production-ready Next.js App Router setup with Supabase authentication, a clean dashboard shell, ShadCN + Tailwind UI components, and a complete settings experience so you can ship faster.
+Welcome to SupaNext kit 2! This documentation will help you understand the project structure, components, and how to use them effectively.
 
-When I adopted this technology stack, I had the idea of creating a template that would serve as a solid foundation for me, with the essentials that every project needs so I wouldn't waste time and could focus on more important things.
+## Overview
 
-I've used this template for a variety of applications, from my side projects to complex ones for the company I work for. Whether I have or my team uses Supabase as a BaaS, this template has saved us hours of work and also a lot of Claude Code Tokens 🤣, since we now have a foundation to start from and don't have to reinvent the wheel.
+A Next.js + Supabase starter focused on shipping productivity. It includes a production-ready App Router setup, Supabase auth integration, middleware-based route protection, a dashboard shell, and Tailwind v4 + shadcn/ui components.
 
-Hope you Enjoy this template! 
+This README reflects the current repository state. Stale info from earlier iterations has been removed or marked as TODO.
 
-<img style="display: block; margin: 0 auto;" width="600" heigh="200"  alt="Supabase and Next js starter template" src="https://supabase-nextjs-starter-template.vercel.app/assets/images/preview.png"/>
+## Features
+- Complete user authentication flow (sign up, sign in, forgot password, update password, confirm email)
+- Landing page with additional sections.
+- Dashboard with sidebar and nav.
+- Profile settings (update profile info, update password, theme toggle, dark mode toggle)
+- Project page (CRUD operations on a table) to use as a template for your own.
+- Users logins audit
 
-## 🔥 DEMO
+## Tech Stack
+- Next.js 15 (App Router) + React 19 + TypeScript
+- Supabase auth with SSR cookie pass-through (`@supabase/ssr`)
+- Tailwind CSS v4 via `@tailwindcss/postcss`; global styles in `app/globals.css`
+- ESLint flat config extending `next/core-web-vitals` and `next/typescript`
+- Vitest for unit tests
+- Path alias `@/*` (see `tsconfig.json`)
 
-[VIEW DEMO](https://supabase-nextjs-starter-template.vercel.app)
+## Requirements
 
-
-### Highlights
-- **End-to-end auth**: Email/password sign up, sign in, password reset, update password, and email OTP confirmation via Supabase.
-- **Protected routes**: Middleware-enforced route protection with smart redirects.
-- **Dashboard shell**: Responsive sidebar, breadcrumbs, and header out of the box.
-- **Account settings**: Profile and password forms powered by React Hook Form and Zod.
-- **Theme + toasts**: Dark/light mode with `next-themes` and app-wide toasts via `sonner`.
-- **Type-safe**: TypeScript-first with strict, readable code.
-
-### Tech Stack
-- **Core**: Next.js 15 (App Router), React 19, TypeScript 5
-- **Auth + Data**: Supabase (`@supabase/ssr`, `@supabase/supabase-js`)
-- **UI/UX**: Tailwind CSS v4, shadcn/ui primitives (Radix UI), `lucide-react`, `sonner`, `next-themes`
-- **Forms + Validation**: React Hook Form, Zod
-- **Testing**: Vitest
-
----
-
-## Quick Start
-
-### 1) Prerequisites
 - Node.js 18+ (LTS recommended)
-- A Supabase project (free tier is fine)
+- npm (repository includes `package-lock.json`)
+- A Supabase project (for auth)
 
-### 2) Install dependencies
+## Setup
+
+1) Install dependencies
 ```bash
 npm install
-# or: pnpm install | yarn | bun install
 ```
 
-### 3) Configure environment variables
-Create a `.env.local` in the project root:
+2) Environment variables
+Create `.env.local` in the project root:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your_supabase_anon_key
-
-# Optional but recommended for correct redirects in auth flows
-NEXT_PUBLIC_SITE_URL=http://localhost:3002
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
-
 Notes:
-- Only public variables are required because this app uses Supabase’s SSR helpers which manage cookies securely.
-- If `NEXT_PUBLIC_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` is missing, auth middleware gracefully no-ops to let you explore the UI.
+- The app intentionally gates Supabase-dependent behavior behind env checks. If the two required vars are not present, the UI will still load and middleware will skip auth enforcement.
 
-### 4) Run the app
+3) Run the dev server
 ```bash
 npm run dev
 ```
-The dev server runs on `http://localhost:3002` (see `package.json`).
-
----
-
-## What You Get
-
-### Authentication
-- Email/password sign up and sign in
-- Forgot password and update password flows
-- Email OTP confirmation handler at `app/auth/confirm/route.ts`
-- SSR/CSR-safe Supabase clients: `lib/supabase/server.ts` and `lib/supabase/client.ts`
-
-### Route Protection
-- Centralized logic in `lib/supabase/middleware.ts` wired through `middleware.ts`
-- Public routes: `/`, `/login`, `/sign-up`, `/forgot-password`, `/update-password`, `/sign-up-success`, `/error`
-- Unauthenticated access to protected paths redirects to `/login`
-- Authenticated users navigating to `/login` or `/sign-up` are redirected to `/dashboard`
-
-### Dashboard Shell
-- App sidebar, breadcrumbs, header, and responsive layout in `app/(protected)/layout.tsx`
-- Ready-to-extend `app/(protected)/dashboard/page.tsx`
-
-### Settings Experience
-- `Profile` tab: Update `full_name` and `bio` (stored in Supabase auth user metadata)
-- `Password` tab: Update password with Zod-enforced strength checks
-- `Theme` tab: Toggle dark/light mode via `next-themes`
-
-### Landing Page
-- Clean hero, navbar, and footer under `components/landing/*` and `app/page.tsx`
-
-<img style="display: block; margin: 0 auto;" alt="previews" src="https://supabase-nextjs-starter-template.vercel.app/assets/images/previews.png"/>
-
----
-
-## Project Structure
-
-```
-app/
-  (auth)/                 # Public auth pages (login, sign-up, forgot/update password)
-  (protected)/            # Authenticated-only layouts and pages (dashboard, settings)
-  actions/                # Server Actions (auth, settings, users)
-  auth/confirm/route.ts   # Email OTP confirmation handler
-components/
-  auth/                   # Auth forms
-  dashboard/              # Sidebar, breadcrumbs, user nav
-  settings/               # Profile, password, appearance forms
-  ui/                     # shadcn/ui components
-lib/
-  supabase/               # SSR/CSR clients and auth-aware middleware
-  validations-schemas/    # Zod schemas for auth and settings
-  utils.ts                # Helpers (classnames, date formatting, etc.)
-```
-
----
-
-## Environment Variables
-
-- **Required**
-  - `NEXT_PUBLIC_SUPABASE_URL`
-  - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` (Supabase anon key)
-
-- **Recommended**
-  - `NEXT_PUBLIC_SITE_URL` (used to craft redirect URLs in auth flows)
-
-If you run without the required Supabase vars, middleware skips auth enforcement so you can explore the UI.
-
----
-
-## Supabase Notes
-
-This starter primarily uses Supabase Auth and stores user-facing profile fields in the auth user’s metadata. There is also an optional `profiles` table utility in `app/actions/users-actions.ts` you can adopt if you prefer a dedicated table for richer profiles.
-
-Optional example table (adjust to your needs):
-```sql
--- Create a profiles table linked to auth.users
-create table if not exists public.profiles (
-  id uuid primary key references auth.users(id) on delete cascade,
-  full_name text,
-  avatar_url text,
-  bio text,
-  status text default 'active',
-  email text,
-  phone text,
-  stripe_customer_id text,
-  stripe_subscription_id text,
-  created_at timestamptz default now(),
-  updated_at timestamptz default now()
-);
--- Enable RLS and add policies for row ownership before production.
-alter table profiles enable row level security;
-create policy "Can view own profile data." on profiles for select using (auth.uid() = id);
-create policy "Can update own profile data." on profiles for update using (auth.uid() = id);
-
-```
-This trigger automatically creates a profile entry when a new user signs up via Supabase Auth.
-```sql
--- Create a tigger to Automatically create a profile entry
-create function public.handle_new_user() 
-returns trigger as $$
-begin
-  insert into public.users (id, full_name, avatar_url)
-  values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
-  return new;
-end;
-$$ language plpgsql security definer;
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
-
-```
-
-Optional Profiles to Auth User sync trigger. This is really Helpful to sync the Auth User when profile information Changes Through the Dashboard 
-```sql
-CREATE OR REPLACE FUNCTION public.sync_profile_to_auth_user()
-  RETURNS trigger
-  LANGUAGE plpgsql
-  SECURITY DEFINER
-AS $$
-BEGIN
-  -- Only run when one of these really changed
-  IF  OLD.full_name   IS DISTINCT FROM NEW.full_name
-   OR OLD.avatar_url  IS DISTINCT FROM NEW.avatar_url
-   OR OLD.phone       IS DISTINCT FROM NEW.phone
-  THEN
-    UPDATE auth.users
-    SET
-      -- merge in the new full_name & avatar_url into the JSON metadata
-      raw_user_meta_data = (
-        (
-          jsonb_set(
-            jsonb_set(
-              COALESCE(raw_user_meta_data::jsonb, '{}'::jsonb),
-              '{full_name}',
-              to_jsonb(NEW.full_name),
-              true
-            ),
-            '{avatar_url}',
-            to_jsonb(NEW.avatar_url),
-            true
-          )
-        )::json
-      ),
-      -- update the phone column on auth.users too
-      phone = NEW.phone
-    WHERE id = NEW.id;
-  END IF;
-
-  RETURN NEW;
-END;
-$$;
-
--- 3. Wire up the trigger on your profiles table
-CREATE TRIGGER on_profile_updated
-  AFTER UPDATE ON public.profiles
-  FOR EACH ROW
-  WHEN (
-    OLD.full_name  IS DISTINCT FROM NEW.full_name
- OR OLD.avatar_url IS DISTINCT FROM NEW.avatar_url
- OR OLD.phone      IS DISTINCT FROM NEW.phone
-  )
-  EXECUTE FUNCTION public.sync_profile_to_auth_user();
-
-```
-
----
+The app starts on http://localhost:3000 (Turbopack).
 
 ## Scripts
 
-- `npm run dev` – Start dev server with Turbopack on port 3002
+Defined in `package.json`:
+- `npm run dev` – Next dev with Turbopack on port 3000
 - `npm run build` – Production build
-- `npm run start` – Run production build
-- `npm run lint` – Lint with ESLint
-- `npm run test` / `npm run test:watch` – Run Vitest
+- `npm run start` – Start the production server
+- `npm run lint` – Lint with ESLint (flat config)
+- `npm run test` – Run Vitest once
+- `npm run test:watch` – Run Vitest in watch mode
 
----
+TODO: If your team prefers port 3002 (earlier docs referenced this), update the dev script and README to match.
 
-## Routing Overview
+## Environment Variables
 
-- Public
-  - `/` – Marketing/landing
-  - `/login`, `/sign-up`, `/forgot-password`, `/update-password`, `/sign-up-success`, `/error`
+Required at runtime when enabling Supabase auth:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`
+- `NEXT_PUBLIC_SITE_URL`
 
-- Protected
-  - `/dashboard`
-  - `/settings` (Profile, Password, Theme tabs)
+## Auth & Middleware
 
-Auth is enforced by middleware; see `lib/supabase/middleware.ts`.
+- Entry: `middleware.ts` delegates to `lib/supabase/middleware.updateSession()`.
+- Behavior when env vars are present:
+  - Unauthenticated users are redirected from protected routes to `/login`.
+  - Authenticated users are redirected away from `/login` and `/sign-up` to `/dashboard`.
+- Public routes (current list): `/login`, `/sign-up`, `/forgot-password`, `/update-password`, `/sign-up-success`, `/error`, any path under `/auth`. The home route `/` is also treated as public by a special-case check.
+- Matcher excludes: `_next/static`, `_next/image`, `favicon.ico`, and common image extensions.
 
----
+See:
+- `middleware.ts`
+- `lib/supabase/middleware.ts`
+- `lib/utils.ts`
 
-## Extending the Starter
+## Supabase Setup
+You must have a Supabase project with an Anonymous API key. (free tier is fine).
+Go to https://supabase.com/ and create a new project
 
-- **Add social auth**: Wire Supabase OAuth providers and connect to the existing auth UI buttons.
-- **Persist richer profiles**: Adopt the `profiles` table and store additional fields beyond auth metadata.
-- **Add billing**: Integrate Stripe and persist IDs on the user record or `profiles`.
-- **Enhance testing**: Flesh out Vitest with unit and integration tests for server actions.
+## Database Schema
+You can find the database schema in `supabase/schema.sql`
+We have three tables:
+- profiles
+- products
+- user_logins
 
----
+These tables are required for the app to work. But you can add more tables as you need.
+Only the `profiles` table is required for the app to work. Products and user_logins are optional. but keep in mind that you will have to remove the code related to them.
+
+## Supabase Auth Email Configuration
+In order to use the email authentication feature, you need to configure the email provider in the Supabase dashboard.
+In Supabase dashboard, go to Authentication -> Email -> Confirm sign up.
+
+The message body looks like:
+```
+<h2>Confirm your signup</h2>
+
+<p>Follow this link to confirm your user:</p>
+<p><a href="{{ .ConfirmationURL }}">Confirm your mail</a></p>
+```
+You have to replace the `{{ .ConfirmationURL }}` with `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email`
+
+So the final resul should looks like:
+
+```aiignore
+<h2>Confirm your signup</h2>
+
+<p>Follow this link to confirm your user:</p>
+<p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email">Confirm your mail</a></p>
+```
+
+## Project Structure
+
+High-level folders:
+```
+app/
+  (protected)/            # Authenticated-only layouts and pages (e.g., dashboard)
+  actions/                # Server Actions (auth, settings, etc.)
+  page.tsx                # Landing / marketing page
+components/
+  auth/                   # Auth forms
+  dashboard/              # Sidebar, nav, etc.
+  settings/               # Profile / password forms
+  ui/                     # shadcn/ui components
+hooks/
+lib/
+  supabase/               # SSR/CSR clients, middleware integration
+  validations-schemas/    # Zod schemas
+  utils.ts
+middleware.ts             # Next.js middleware entry
+postcss.config.mjs        # Tailwind v4 via @tailwindcss/postcss
+eslint.config.mjs         # ESLint flat config
+next.config.ts
+public/
+types/                    # TypeScript types
+```
+
+## Entry Points
+
+- App router root: `app/page.tsx`
+- Protected area example: `app/(protected)/dashboard/page.tsx`
+
+## Development Notes
+
+- Path alias: `@/*` and `@/public/*` (see `tsconfig.json`)
+- Tailwind v4: Utilities-first; configure via `postcss.config.mjs`; global styles in `app/globals.css`
+- Prefer Server Components by default; add `"use client"` only when needed
 
 ## Deployment
 
-This project works great on Vercel. Set the same environment variables in your hosting provider:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`
-- `NEXT_PUBLIC_SITE_URL` (point to your live URL)
-
-Middleware and Supabase SSR helpers are edge-friendly, but review your plan/limits for production.
+- Works well on platforms like Vercel. Ensure the same env vars are set in the host environment:
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`
+  - `NEXT_PUBLIC_SITE_URL` (set to your production origin)
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvito8916%2Fsupabase-nextjs-starter-template)
 
----
-
-## Contributing
-
-Issues and PRs are welcome. Please keep changes focused and consistent with the code style. Run `npm run lint` and `npm run test` before submitting.
-
----
-
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT — see `LICENSE.txt`.
 
+## TODOs
+
+- Update to Next.js 16 and React 19.2
+- Implement Cache Components
+- Implement Resend and React Email
+- Stripe Subscription Integration
 
