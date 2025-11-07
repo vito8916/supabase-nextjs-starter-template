@@ -3,7 +3,7 @@ import {Badge} from "@/components/ui/badge";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Separator} from "@/components/ui/separator";
 import {capitalizeText, cn, getInitials} from "@/lib/utils";
-import {Mail, Shield, Calendar, Clock, ImageIcon, Activity, AlertTriangle, MapPin, Monitor} from "lucide-react";
+import {Mail, Calendar, Clock, ImageIcon, Activity, AlertTriangle, MapPin, Monitor} from "lucide-react";
 import {formatDate} from "@/lib/utils";
 import {getAuthUser} from "@/app/actions/auth/auth-actions";
 import {getUserProfile} from "@/app/actions/settings/profile-actions";

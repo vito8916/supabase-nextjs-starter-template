@@ -1,7 +1,4 @@
 import React, { ComponentProps } from "react"
-import {
-  GalleryVerticalEnd,
-} from "lucide-react"
 
 import { NavMain } from "@/components/dashboard/nav-main"
 import { NavProjects } from "@/components/dashboard/nav-projects"
@@ -17,8 +14,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import {getUserProfile} from "@/app/actions/settings/profile-actions";
-import Image from "next/image";
-import Logo from "@/public/supanext-logo.svg"
 import VicboxLogo from "@/components/vicbox-logo";
 
 
