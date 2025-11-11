@@ -5,6 +5,7 @@ import {createClient} from "@/lib/supabase/server";
 import {getAuthUser} from "@/app/actions/auth/auth-actions";
 import {ProjectDTO, ProjectRow} from "@/types/projects";
 import {revalidatePath} from "next/cache";
+import { ProjectSchemaValues } from "@/lib/validations-schemas/projects";
 
 function must<T>(data: T | null, error: unknown, msg: string): T {
     if (error) throw error;
@@ -53,6 +54,25 @@ export async function deleteProject(id: string) {
     const supabase = await createClient();
     const { error } = await supabase.from("projects").delete().eq("id", id);
     if (error) throw error;
+}
+
+/**
+ * Create a new project
+ */
+export async function createProjectAction(data: ProjectSchemaValues) {
+    const user = await getAuthUser();
+    if (!user) throw new Error("Not authenticated");
+    const supabase = await createClient();
+    const { data: projectData, error } = await supabase.from("projects").insert({
+        name: data.name,
+        description: data.description,
+        visibility: data.visibility,
+        status: data.status,
+        owner_id: user.id,
+    });
+    if (error) throw error;
+    revalidatePath("/projects");
+    return projectData;
 }
 
 

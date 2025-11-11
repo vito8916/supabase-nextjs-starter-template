@@ -3,6 +3,7 @@ import {Suspense} from "react";
 import ProjectsTableSkeleton from "@/components/projects/projects-table-skeleton";
 import ProjectsContent from "@/components/projects/content";
 import {getProjectsAction} from "@/app/actions/projects/actions";
+import {ProjectSheet} from "@/components/projects/project-sheet";
 
 async function ProjectsPage() {
     const projectsPromise = getProjectsAction();
@@ -19,7 +20,7 @@ async function ProjectsPage() {
                     </p>
                 </div>
                 <div className="flex gap-2 items-center">
-                   <Button>Add New</Button>
+                   <ProjectSheet />
                 </div>
             </div>
             <Suspense fallback={<ProjectsTableSkeleton />}>
