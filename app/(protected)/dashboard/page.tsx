@@ -127,12 +127,12 @@ export default async function DashboardPage() {
                             <Avatar className="h-16 w-16">
                                 <AvatarImage src={userProfileInfo?.avatar_url ?? ''}/>
                                 <AvatarFallback className="text-lg font-semibold bg-primary/10">
-                                    {getInitials(user?.user_metadata?.full_name)}
+                                    {getInitials(userProfileInfo?.full_name)}
                                 </AvatarFallback>
                             </Avatar>
                             <div className="flex-1">
                                 <CardTitle className="text-2xl mb-2">
-                                    Welcome back, {capitalizeText(user?.user_metadata.full_name)}
+                                    Welcome back, {capitalizeText(userProfileInfo?.full_name ?? 'N/A')}
                                 </CardTitle>
                                 <Badge variant="outline"
                                        className={cn(userProfileInfo?.status === 'active' ? 'bg-green-500/50 border-green-500/50' : 'bg-destructive/10', "text-xs")}>
@@ -150,14 +150,14 @@ export default async function DashboardPage() {
                             <div className="flex items-center space-x-3 text-sm">
                                 <Mail className="h-4 w-4 text-muted-foreground"/>
                                 <span className="text-muted-foreground">Email:</span>
-                                <span className="font-medium">{user?.email}</span>
+                                <span className="font-medium">{userProfileInfo?.email}</span>
                             </div>
 
                             <div className="flex items-center space-x-3 text-sm">
                                 <Calendar className="h-4 w-4 text-muted-foreground"/>
                                 <span className="text-muted-foreground">Member since:</span>
                                 <span className="font-medium">
-                                {user?.created_at ? formatDate(user.created_at) : 'N/A'}
+                                {userProfileInfo?.created_at ? formatDate(userProfileInfo.created_at) : 'N/A'}
                             </span>
                             </div>
 
@@ -173,7 +173,7 @@ export default async function DashboardPage() {
                                 <ImageIcon className="h-4 w-4 text-muted-foreground"/>
                                 <span className="text-muted-foreground">Avatar Url:</span>
                                 <span className="font-medium">
-                                {user?.user_metadata?.avatar_url ? user.user_metadata?.avatar_url : 'N/A'}
+                                {userProfileInfo?.avatar_url ? userProfileInfo.avatar_url : 'N/A'}
                             </span>
                             </div>
                         </div>

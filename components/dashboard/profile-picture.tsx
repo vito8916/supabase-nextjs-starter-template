@@ -9,7 +9,7 @@ export default function ProfilePicture({fullName, avatarUrl,className,}: { fullN
         <Avatar className={cn("h-24 w-24 border-2 border-primary/20 rounded-full", className)}>
             <AvatarImage className="object-cover object-center p-0" src={avatarUrl} alt="Profile picture" />
             <AvatarFallback className="text-lg font-semibold bg-primary/10">
-                {getInitials(fullName ?? "U")}
+                {getInitials(fullName)}
             </AvatarFallback>
         </Avatar>
     );
