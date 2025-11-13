@@ -16,7 +16,6 @@ This README reflects the current repository state. Stale info from earlier itera
 - Dashboard with sidebar and nav.
 - Profile settings (update profile info, update password, theme toggle, dark mode toggle)
 - Project page (CRUD operations on a table) to use as a template for your own.
-- Users logins audit
 
 ## Tech Stack
 - Next.js 15 (App Router) + React 19 + TypeScript
@@ -49,7 +48,9 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 Notes:
 - The app intentionally gates Supabase-dependent behavior behind env checks. If the two required vars are not present, the UI will still load and middleware will skip auth enforcement.
 
-3) Run the dev server
+3) Supabase Auth Emails Configuration. See how [See how](#supabase-auth-email-configuration)
+
+4) Run the dev server
 ```bash
 npm run dev
 ```
@@ -64,8 +65,6 @@ Defined in `package.json`:
 - `npm run lint` – Lint with ESLint (flat config)
 - `npm run test` – Run Vitest once
 - `npm run test:watch` – Run Vitest in watch mode
-
-TODO: If your team prefers port 3002 (earlier docs referenced this), update the dev script and README to match.
 
 ## Environment Variables
 
@@ -97,7 +96,6 @@ You can find the database schema in `supabase/schema.sql`
 We have three tables:
 - profiles
 - products
-- user_logins
 
 These tables are required for the app to work. But you can add more tables as you need.
 Only the `profiles` table is required for the app to work. Products and user_logins are optional. but keep in mind that you will have to remove the code related to them.

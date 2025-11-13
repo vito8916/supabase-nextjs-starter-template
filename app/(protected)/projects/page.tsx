@@ -1,4 +1,3 @@
-import {Button} from "@/components/ui/button";
 import {Suspense} from "react";
 import ProjectsTableSkeleton from "@/components/projects/projects-table-skeleton";
 import ProjectsContent from "@/components/projects/content";

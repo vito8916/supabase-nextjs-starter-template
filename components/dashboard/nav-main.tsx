@@ -154,7 +154,7 @@ export function NavMain() {
                                         {item.items?.map((subItem) => (
                                             <SidebarMenuSubItem key={subItem.title}>
                                                 <SidebarMenuSubButton asChild>
-                                                    <Link href={subItem.url}
+                                                    <Link prefetch href={subItem.url}
                                                           className={cn(pathname === subItem.url && "bg-sidebar-accent text-sidebar-accent-foreground")}>
                                                         <span>{subItem.title}</span>
                                                     </Link>
@@ -168,7 +168,7 @@ export function NavMain() {
                     ) : (
                         <SidebarMenuItem key={item.title}>
                             <SidebarMenuButton asChild>
-                                <Link href={item.url}
+                                <Link prefetch href={item.url}
                                       className={cn(pathname === item.url && "bg-sidebar-accent text-sidebar-accent-foreground")}>
                                     {item.icon && <item.icon/>}
                                     <span>{item.title}</span>
