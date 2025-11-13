@@ -1,5 +1,7 @@
 # SupaNext Starter Kit 2
 
+WARNIG: THIS REPO IS UNDER MANINTENANCE IN ORDER TO GIVE YOU A BETTER AND PRODUCTION GRADE STARTER KIT. THANKS.
+
 Welcome to SupaNext kit 2! This documentation will help you understand the project structure, components, and how to use them effectively.
 
 ## Overview
@@ -101,25 +103,32 @@ These tables are required for the app to work. But you can add more tables as yo
 Only the `profiles` table is required for the app to work. Products and user_logins are optional. but keep in mind that you will have to remove the code related to them.
 
 ## Supabase Auth Email Configuration
+
+### Confirmation Email Configuration
+
 In order to use the email authentication feature, you need to configure the email provider in the Supabase dashboard.
 In Supabase dashboard, go to Authentication -> Email -> Confirm sign up.
 
-The message body looks like:
-```
-<h2>Confirm your signup</h2>
-
-<p>Follow this link to confirm your user:</p>
-<p><a href="{{ .ConfirmationURL }}">Confirm your mail</a></p>
-```
-You have to replace the `{{ .ConfirmationURL }}` with `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email`
-
-So the final resul should looks like:
+Replace the email content with:
 
 ```aiignore
 <h2>Confirm your signup</h2>
 
 <p>Follow this link to confirm your user:</p>
 <p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email">Confirm your mail</a></p>
+```
+
+### Reset Password Email Configuration
+In order to use the email reset password feature, you need to configure the email provider in the Supabase dashboard.
+In Supabase dashboard, go to Authentication -> Email -> Reset password.
+
+Replace the email content with:
+
+```aiignore
+<h2>Reset Password</h2>
+
+<p>Follow this link to reset the password for your user:</p>
+<p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/update-password">Reset Password</a></p>
 ```
 
 ## Project Structure

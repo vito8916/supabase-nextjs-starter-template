@@ -18,7 +18,7 @@ function ProjectsContent({ projectsPromise }: ProjectsContentProps) {
     const handleDelete = async (ids: string[]) => {
         const result = await bulkDeleteProjectsAction(ids);
         if (!result.ok) {
-            throw new Error(result.error?.message || "Failed to delete projects");
+            throw new Error((result.error as { message: string })?.message ?? "Failed to delete projects");
         }
         // Refresh the page to show updated data
         router.refresh();
