@@ -26,6 +26,7 @@ From that idea, Supanext Kit 2 was born: a ready-to-use template that reduces co
 - Project page (CRUD operations on a table) to use as a template for your own.
 - Next.js Cache Components.
 - Experimental staleTimes (dynamic, static) for Improving caching and navigation.
+- Easy to Customise using https://tweakcn.com/editor/theme
 
 ## Tech Stack
 - Next.js 16 (App Router) + CacheComponents + React 19.2 + TypeScript
