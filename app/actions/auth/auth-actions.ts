@@ -22,13 +22,10 @@ export const getAuthUser = cache(async () => {
     const supabase = await createClient();
 
     // Retrieve the current auth user from Supabase.
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (!user) return null;
-
-    if (error) {
-      // Log and return null to avoid throwing in server actions.
-      console.error('Error fetching user:', error);
-      return null;
+    const { data } = await supabase.auth.getClaims();
+    const user = data?.claims;
+    if (!user) {
+        throw new Error('User not authenticated');
     }
 
     return user;

@@ -8,7 +8,7 @@ import {ThemeSwitcher} from "@/components/auth/theme-switcher";
  * Shared layout for authenticated areas (dashboard, settings, etc.).
  * Provides sidebar, header with breadcrumbs, and main content region.
  */
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
         <SidebarProvider>
             <AppSidebar />

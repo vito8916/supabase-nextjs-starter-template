@@ -5,6 +5,8 @@ import {getProjectsAction} from "@/app/actions/projects/actions";
 import {ProjectSheet} from "@/components/projects/project-sheet";
 
 async function ProjectsPage() {
+    // Note: Cannot use "use cache" here because getProjectsAction uses cookies() for auth
+    // The Suspense boundary below ensures proper streaming of dynamic content
     const projectsPromise = getProjectsAction();
 
     return (

@@ -62,7 +62,7 @@ export function SignUpForm({
         return;
       }
       if (result?.url) {
-        window.location.href = result.url;
+        router.push(result.url);
       }
     } catch {
       toast.error("OAuth sign-in failed. Please try again.");

@@ -7,10 +7,11 @@ import {revalidatePath} from "next/cache";
 export async function updatePasswordAction(values: PasswordFormValues) {
     const supabase = await createClient();
     // Get the current user
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getClaims();
+    const user = data?.claims;
 
     if (!user) {
-        return { error: "You must be logged in to update your password" };
+        throw new Error('User not authenticated');
     }
 
     const parsed = passwordFormSchema.safeParse(values);

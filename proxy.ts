@@ -4,7 +4,7 @@ import { type NextRequest } from "next/server";
 /**
  * Edge middleware entrypoint delegating to Supabase-aware session handler.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   return await updateSession(request);
 }
 
