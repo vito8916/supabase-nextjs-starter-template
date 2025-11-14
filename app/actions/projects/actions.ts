@@ -33,7 +33,7 @@ function toProjectDTO(row: ProjectRow): ProjectDTO {
 //Get all projects from the projects table of Supabase
 export const getProjectsAction = cache(async () => {
     const user = await getAuthUser();
-    if (!user) throw new Error("Not authenticated");
+    if (!user) throw new Error("User not authenticated");
 
     const supabase = await createClient();
 
@@ -49,7 +49,7 @@ export const getProjectsAction = cache(async () => {
 */
 export async function deleteProject(id: string) {
     const user = await getAuthUser();
-    if (!user) throw new Error("Not authenticated");
+    if (!user) throw new Error("User not authenticated");
 
     const supabase = await createClient();
     const { error } = await supabase.from("projects").delete().eq("id", id);
@@ -61,14 +61,14 @@ export async function deleteProject(id: string) {
  */
 export async function createProjectAction(data: ProjectSchemaValues) {
     const user = await getAuthUser();
-    if (!user) throw new Error("Not authenticated");
+    if (!user) throw new Error("User not authenticated");
     const supabase = await createClient();
     const { data: projectData, error } = await supabase.from("projects").insert({
         name: data.name,
         description: data.description,
         visibility: data.visibility,
         status: data.status,
-        owner_id: user.id,
+        owner_id: user.sub,
     });
     if (error) throw error;
     revalidatePath("/projects");
@@ -81,7 +81,7 @@ export async function createProjectAction(data: ProjectSchemaValues) {
  */
 export async function bulkDeleteProjectsAction(ids: string[]) {
     const user = await getAuthUser();
-    if (!user) throw new Error("Not authenticated");
+    if (!user) throw new Error("User not authenticated");
     if (!ids || ids.length === 0) {
         throw new Error("No project IDs provided");
     }

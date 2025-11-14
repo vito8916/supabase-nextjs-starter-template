@@ -10,44 +10,45 @@ export const getUserProfile = cache(async (): Promise<ProfileDTO | null> => {
     const supabase = await createClient();
 
     // Ensure there is an authenticated session.
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getClaims();
+    const user = data?.claims;
+
     if (!user) {
         throw new Error('User not authenticated');
     }
 
     // Query the profile row for the current user.
-    const { data, error } = await supabase
+    const { data: profileData, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', user.id)
+        .eq('id', user.sub)
         .single();
 
     if (error) {
-        // Log and return null to avoid throwing inside server actions.
-        console.error('Error fetching user:', error);
-        return null;
+        throw new Error(`Error fetching user profile: ${error.message}`);
     }
 
     return {
-        id: data.id,
-        full_name: data.full_name,
-        avatar_url: data.avatar_url,
-        bio: data.bio,
-        status: data.status,
-        email: data.email,
-        phone: data.phone,
-        created_at: data.created_at,
-        updated_at: data.updated_at,
+        id: profileData.id,
+        full_name: profileData.full_name,
+        avatar_url: profileData.avatar_url,
+        bio: profileData.bio,
+        status: profileData.status,
+        email: profileData.email,
+        phone: profileData.phone,
+        created_at: profileData.created_at,
+        updated_at: profileData.updated_at,
     };
 });
 
 export async function updateProfileAction(values: ProfileFormValues) {
     const supabase = await createClient();
     // Get the current user
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getClaims();
+    const user = data?.claims;
 
     if (!user) {
-        return { error: "You must be logged in to update your profile" };
+        throw new Error('User not authenticated');
     }
 
     const parsed = profileSchema.safeParse(values);
@@ -63,7 +64,7 @@ export async function updateProfileAction(values: ProfileFormValues) {
             full_name: parsed.data.fullName,
             bio: parsed.data.bio,
         })
-        .eq("id", user.id)
+        .eq("id", user.sub)
         .select("*")
         .single();
 
