@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ProfileForm } from '@/components/settings/profile-form'
@@ -6,26 +7,22 @@ import { AppearanceForm } from '@/components/settings/appearance-form'
 import { createClient } from '@/lib/supabase/server'
 import {getUserProfile} from "@/app/actions/settings/profile-actions";
 import {ProfileDTO} from "@/types/profile";
+import SettingsLoading from './loading';
 
-export default async function SettingsPage() {
+async function SettingsContent() {
   // Fetch the current user on the server to hydrate default values in forms.
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
+  const { data } = await supabase.auth.getClaims();
+  // Get the current user from the claims
+  const currentUser = data?.claims;
+  if (!currentUser) {
       throw new Error('User not authenticated');
   }
 
   const userProfileInfo = await getUserProfile();
 
   return (
-    <div className="container mx-auto py-10 px-4">
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold mb-2">Settings</h1>
-                <p className="text-muted-foreground">
-                    Manage your account settings and preferences.
-                </p>
-            </div>
-            
+    <>
             <Tabs defaultValue="profile" className="w-full">
                 <TabsList className="grid w-full grid-cols-3 mb-8">
                     <TabsTrigger value="profile">Profile</TabsTrigger>
@@ -75,6 +72,22 @@ export default async function SettingsPage() {
                     </Card>
                 </TabsContent>
             </Tabs>
-        </div>
-  )
+    </>
+  );
+}
+
+export default function SettingsPage() {
+  return (
+    <div className="container mx-auto py-10 px-4">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Settings</h1>
+        <p className="text-muted-foreground">
+          Manage your account settings and preferences.
+        </p>
+      </div>
+      <Suspense fallback={<SettingsLoading />}>
+        <SettingsContent />
+      </Suspense>
+    </div>
+  );
 }

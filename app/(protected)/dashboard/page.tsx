@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Suspense } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
 	Card,
@@ -9,21 +9,13 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { capitalizeText, cn, getInitials } from "@/lib/utils";
+import { Monitor } from "lucide-react";
 import {
-	Mail,
-	Calendar,
-	Clock,
-	ImageIcon,
-	Monitor,
 	MoveDownRight,
 	MoveUpRight,
 	User2Icon,
 	RefreshCcwIcon,
 } from "lucide-react";
-import { formatDate } from "@/lib/utils";
-import { getAuthUser } from "@/app/actions/auth/auth-actions";
 import { getUserProfile } from "@/app/actions/settings/profile-actions";
 import {
 	Empty,
@@ -34,11 +26,18 @@ import {
 	EmptyTitle,
 } from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
+import UserAccountDetailsCard from "@/components/dashboard/user-account-details-card";
+import { Spinner } from "@/components/ui/spinner";
 
-export default async function DashboardPage() {
-	const user = await getAuthUser();
+async function DashboardContent() {
 	const userProfileInfo = await getUserProfile();
 	
+	return (
+		<UserAccountDetailsCard userProfileInfo={userProfileInfo!} />
+	);
+}
+
+export default function DashboardPage() {
 	return (
 		<div>
 			<h1 className="text-2xl font-bold mb-4">Dashboard</h1>
@@ -137,92 +136,17 @@ export default async function DashboardPage() {
 				</Card>
 			</div>
 			<div className="flex gap-4 w-full justify-between">
-				<Card className="w-full">
-					<CardHeader className="pb-4">
-						<div className="flex items-center space-x-4">
-							<Avatar className="h-16 w-16">
-								<AvatarImage
-									src={userProfileInfo?.avatar_url ?? ""}
-								/>
-								<AvatarFallback className="text-lg font-semibold bg-primary/10">
-									{getInitials(userProfileInfo?.full_name)}
-								</AvatarFallback>
-							</Avatar>
-							<div className="flex-1">
-								<CardTitle className="text-2xl mb-2">
-									Welcome back,{" "}
-									{capitalizeText(
-										userProfileInfo?.full_name ?? "N/A"
-									)}
-								</CardTitle>
-								<Badge
-									variant="outline"
-									className={cn(
-										userProfileInfo?.status === "active"
-											? "bg-green-500/50 border-green-500/50"
-											: "bg-destructive/10",
-										"text-xs"
-									)}
-								>
-									{userProfileInfo?.status}
-								</Badge>
+				<Suspense fallback={
+					<Card className="w-full">
+						<CardContent className="p-6">
+							<div className="flex justify-center items-center h-32">
+								<Spinner className="size-8" />
 							</div>
-						</div>
-					</CardHeader>
-
-					<Separator />
-
-					<CardContent className="p-y-6">
-						<h3 className="mb-4">Account Details</h3>
-						<div className="grid gap-4">
-							<div className="flex items-center space-x-3 text-sm">
-								<Mail className="h-4 w-4 text-muted-foreground" />
-								<span className="text-muted-foreground">
-									Email:
-								</span>
-								<span className="font-medium">
-									{userProfileInfo?.email}
-								</span>
-							</div>
-
-							<div className="flex items-center space-x-3 text-sm">
-								<Calendar className="h-4 w-4 text-muted-foreground" />
-								<span className="text-muted-foreground">
-									Member since:
-								</span>
-								<span className="font-medium">
-									{userProfileInfo?.created_at
-										? formatDate(userProfileInfo.created_at)
-										: "N/A"}
-								</span>
-							</div>
-
-							<div className="flex items-center space-x-3 text-sm">
-								<Clock className="h-4 w-4 text-muted-foreground" />
-								<span className="text-muted-foreground">
-									Last active:
-								</span>
-								<span className="font-medium">
-									{user?.last_sign_in_at
-										? formatDate(user.last_sign_in_at)
-										: "N/A"}
-								</span>
-							</div>
-
-							<div className="flex items-center space-x-3 text-sm">
-								<ImageIcon className="h-4 w-4 text-muted-foreground" />
-								<span className="text-muted-foreground">
-									Avatar Url:
-								</span>
-								<span className="font-medium">
-									{userProfileInfo?.avatar_url
-										? userProfileInfo.avatar_url
-										: "N/A"}
-								</span>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
+						</CardContent>
+					</Card>
+				}>
+					<DashboardContent />
+				</Suspense>
 				{/* Recent Login Activity Card */}
 				<Card className="w-full">
 					<CardHeader>
