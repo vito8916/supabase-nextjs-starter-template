@@ -1,14 +1,22 @@
 # SupaNext Starter Kit 2
 
-WARNIG: THIS REPO IS UNDER MANINTENANCE IN ORDER TO GIVE YOU A BETTER AND PRODUCTION GRADE STARTER KIT. THANKS.
-
 Welcome to SupaNext kit 2! This documentation will help you understand the project structure, components, and how to use them effectively.
 
 ## Overview
 
 A Next.js + Supabase starter focused on shipping productivity. It includes a production-ready App Router setup, Supabase auth integration, middleware-based route protection, a dashboard shell, and Tailwind v4 + shadcn/ui components.
 
-This README reflects the current repository state. Stale info from earlier iterations has been removed or marked as TODO.
+<!-- image cover -->
+<p align="center">
+  <img src="public/assets/images/bento-features.png" alt="Bento Features Preview" style="max-width: 100%; border-radius: 0.75rem; box-shadow: 0 4px 24px rgba(0,0,0,.07)">
+</p>
+
+## Motivation
+
+I work at a small company with only three engineers, so efficiency is key. In early 2025, I had to launch two new projects while also developing Rulesforai.app. They all shared a similar stack, and at the same time, one of my colleagues needed to create a back office for each one.
+
+That's when I thought, "Why repeat the same thing over and over again?"
+From that idea, Supanext Kit 2 was born: a ready-to-use template that reduces configurations, installations, and headaches. The goal is simple: to help you get started faster and focus on building, not configuring.
 
 ## Features
 - Complete user authentication flow (sign up, sign in, forgot password, update password, confirm email)
@@ -16,10 +24,12 @@ This README reflects the current repository state. Stale info from earlier itera
 - Dashboard with sidebar and nav.
 - Profile settings (update profile info, update password, theme toggle, dark mode toggle)
 - Project page (CRUD operations on a table) to use as a template for your own.
+- Next.js Cache Components.
+- Experimental staleTimes (dynamic, static) for Improving caching and navigation.
 
 ## Tech Stack
-- Next.js 15 (App Router) + React 19 + TypeScript
-- Supabase auth with SSR cookie pass-through (`@supabase/ssr`)
+- Next.js 16 (App Router) + CacheComponents + React 19.2 + TypeScript
+- Supabase auth with SSR cookie pass-through (`@supabase/ssr`) + JWT signing keys
 - Tailwind CSS v4 via `@tailwindcss/postcss`; global styles in `app/globals.css`
 - ESLint flat config extending `next/core-web-vitals` and `next/typescript`
 - Vitest for unit tests
@@ -48,9 +58,11 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 Notes:
 - The app intentionally gates Supabase-dependent behavior behind env checks. If the two required vars are not present, the UI will still load and middleware will skip auth enforcement.
 
-3) Supabase Auth Emails Configuration. See how [See how](#supabase-auth-email-configuration)
+3) Supabase set up. [See how](#supabase-setup)
 
-4) Run the dev server
+4) Supabase Auth Emails Configuration. See how [See how](#supabase-auth-email-configuration)
+
+5) Run the dev server
 ```bash
 npm run dev
 ```
@@ -88,8 +100,11 @@ See:
 - `lib/utils.ts`
 
 ## Supabase Setup
-You must have a Supabase project with an Anonymous API key. (free tier is fine).
-Go to https://supabase.com/ and create a new project
+You must have a Supabase project with the new API keys and JWT Signing Keys. (free tier is fine).
+Go to https://supabase.com/ and create a new project.
+
+NOTE: This project is using the new API keys and the new JWT Signing Key. If you're using the legacy JWT-based API keys (anon, service role secrete) and the legacy JWT secret, watch the Supabase official video tutorial to learn how to change to these new way to work with Supabase.
+[How to roll your Supabase project's keys over to JWT Signing Keys](https://youtu.be/rwnOal_xRtM?si=TV35LfHDBcbhW4C5)
 
 ## Database Schema
 You can find the database schema in `supabase/schema.sql`
@@ -98,7 +113,9 @@ We have three tables:
 - products
 
 These tables are required for the app to work. But you can add more tables as you need.
-Only the `profiles` table is required for the app to work. Products and user_logins are optional. but keep in mind that you will have to remove the code related to them.
+Only the `profiles` table is required for the app to work. Products is optional. but keep in mind that you will have to remove the code related to it.
+
+I Highly recommend you to run the `supabase/schema.sql` into the SQL Editor in Supabase Dashboard.
 
 ## Supabase Auth Email Configuration
 
@@ -181,8 +198,8 @@ MIT — see `LICENSE.txt`.
 
 ## TODOs
 
-- Update to Next.js 16 and React 19.2
-- Implement Cache Components
+- Update to Next.js 16 and React 19.2 👍
+- Implement Cache Components 👍
 - Implement Resend and React Email
 - Stripe Subscription Integration
 
