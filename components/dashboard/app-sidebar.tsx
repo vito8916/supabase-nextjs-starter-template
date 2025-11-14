@@ -1,4 +1,4 @@
-import React, { ComponentProps } from "react"
+import { ComponentProps, Suspense } from "react"
 
 import { NavMain } from "@/components/dashboard/nav-main"
 import { NavProjects } from "@/components/dashboard/nav-projects"
@@ -13,24 +13,29 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import {getUserProfile} from "@/app/actions/settings/profile-actions";
+import { getUserProfile } from "@/app/actions/settings/profile-actions";
 import VicboxLogo from "@/components/vicbox-logo";
+import NavUserSkeleton from "./nav-user-skeleton"
 
+/**
+ * Async component that fetches user profile and renders NavUser
+ * This is wrapped in Suspense from the parent component
+ */
+async function NavUserWithData() {
+  const userProfile = await getUserProfile();
+  
+  if (!userProfile) {
+    return <NavUserSkeleton />;
+  }
 
-export async function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
+  return <NavUser userProfile={userProfile} />;
+}
 
-    
-    const currentUser = await getUserProfile();
-    if(!currentUser) {
-        return null
-    }
-
-    const userInfo = {
-        email: currentUser.email || "No email provided.",
-        fullName: currentUser.full_name || "No name provided.",
-        avatarUrl: currentUser.avatar_url || "",
-    }
-
+/**
+ * AppSidebar - Static sidebar shell that streams dynamic user data
+ * Only the footer (NavUser) requires dynamic data and is wrapped in Suspense
+ */
+export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -41,7 +46,7 @@ export async function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="#">
-                  <VicboxLogo />
+                <VicboxLogo />
                 <span className="text-base font-semibold">SupaNext Kit2</span>
               </a>
             </SidebarMenuButton>
@@ -53,7 +58,9 @@ export async function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
         <NavProjects />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser userInfo={userInfo} />
+        <Suspense fallback={<NavUserSkeleton />}>
+          <NavUserWithData />
+        </Suspense>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
