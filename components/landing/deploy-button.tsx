@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export function DeployButton() {
   return (
-    <>
+    <div className="hidden md:block">
       <Link
         href="https://vercel.com/new/clone?repository-url=https://github.com/vito8916/supabase-nextjs-starter-template&project-name=supanext-starter-kit-2&repository-name=supanext-starter-kit-2&demo-title=SupaNext+Starter+Kit+2&demo-description=A+production-ready+Next.js+App+Router+setup+with+Supabase+authentication%2C+a+clean+dashboard+shell%2C+ShadCN+%2B+Tailwind+UI+components%2C+and+a+complete+settings+experience.&demo-url=https%3A%2F%2Fsupanext-starter-kit-2.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fyourusername%2Fsupanext-starter-kit-2"
         target="_blank"
@@ -20,6 +20,6 @@ export function DeployButton() {
           <span>Deploy to Vercel</span>
         </Button>
       </Link>
-    </>
+    </div>
   );
 }
