@@ -287,7 +287,7 @@ export function DataTable<TData, TValue>({
 	};
 
 	return (
-		<div className="space-y-4">
+		<div className="space-y-4 w-full">
 			{/* Filters */}
 			<div className="flex flex-wrap items-center justify-between gap-3">
 				<div className="flex items-center gap-3">
@@ -492,7 +492,12 @@ export function DataTable<TData, TValue>({
 							>
 								{headerGroup.headers.map((header) => {
 									return (
-										<TableHead key={header.id}>
+										<TableHead key={header.id} 
+										style={{
+											width: header.getSize(),
+											minWidth: header.column.columnDef.minSize,
+											maxWidth: header.column.columnDef.maxSize,
+										  }}>
 											{header.isPlaceholder
 												? null
 												: flexRender(

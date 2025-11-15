@@ -39,9 +39,9 @@ async function DashboardContent() {
 
 export default function DashboardPage() {
 	return (
-		<div>
+		<div className="space-y-6 w-full">
 			<h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-			<div className="grid auto-rows-auto grid-cols-3 gap-5 md:grid-cols-3 lg:grid-cols-4 mb-4">
+			<div className="grid auto-rows-auto grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 mb-4">
 				<Card className="@container/card">
 					<CardHeader>
 						<CardDescription>Total Revenue</CardDescription>
@@ -135,7 +135,7 @@ export default function DashboardPage() {
 					</CardFooter>
 				</Card>
 			</div>
-			<div className="flex gap-4 w-full justify-between">
+			<div className="flex flex-col md:flex-row gap-4 w-full justify-between">
 				<Suspense fallback={
 					<Card className="w-full">
 						<CardContent className="p-6">

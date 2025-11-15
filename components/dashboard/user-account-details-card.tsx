@@ -7,69 +7,69 @@ import { Mail, Calendar, ImageIcon } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { ProfileDTO } from "@/types/profile";
 
-export default function UserAccountDetailsCard({ userProfileInfo }: { userProfileInfo: ProfileDTO }) {
-  return (
-    <Card className="w-full">
-					<CardHeader className="pb-4">
-						<div className="flex items-center space-x-4">
-							<Avatar className="h-16 w-16">
-								<AvatarImage
-									src={userProfileInfo?.avatar_url ?? ""}
-								/>
-								<AvatarFallback className="text-lg font-semibold bg-primary/10">
-									{getInitials(userProfileInfo?.full_name)}
-								</AvatarFallback>
-							</Avatar>
-							<div className="flex-1">
-								<CardTitle className="text-2xl mb-2">
-									Welcome back,{" "}
-									{capitalizeText(
-										userProfileInfo?.full_name ?? "N/A"
-									)}
-								</CardTitle>
-								<Badge
-									variant="outline"
-									className={cn(
-										userProfileInfo?.status === "active"
-											? "bg-green-500/50 border-green-500/50"
-											: "bg-destructive/10",
-										"text-xs"
-									)}
-								>
-									{userProfileInfo?.status}
-								</Badge>
-							</div>
-						</div>
-					</CardHeader>
+export default function UserAccountDetailsCard({
+	userProfileInfo,
+}: {
+	userProfileInfo: ProfileDTO;
+}) {
+	return (
+		<Card className="w-full">
+			<CardHeader className="pb-4">
+				<div className="flex items-center space-x-4">
+					<Avatar className="h-16 w-16">
+						<AvatarImage src={userProfileInfo?.avatar_url ?? ""} />
+						<AvatarFallback className="text-lg font-semibold bg-primary/10">
+							{getInitials(userProfileInfo?.full_name)}
+						</AvatarFallback>
+					</Avatar>
+					<div className="flex-1">
+						<CardTitle className="text-2xl mb-2">
+							Welcome back,{" "}
+							{capitalizeText(
+								userProfileInfo?.full_name ?? "N/A"
+							)}
+						</CardTitle>
+						<Badge
+							variant="outline"
+							className={cn(
+								userProfileInfo?.status === "active"
+									? "bg-green-500/50 border-green-500/50"
+									: "bg-destructive/10",
+								"text-xs"
+							)}
+						>
+							{userProfileInfo?.status}
+						</Badge>
+					</div>
+				</div>
+			</CardHeader>
 
-					<Separator />
+			<Separator />
 
-					<CardContent className="p-y-6">
-						<h3 className="mb-4">Account Details</h3>
-						<div className="grid gap-4">
-							<div className="flex items-center space-x-3 text-sm">
-								<Mail className="h-4 w-4 text-muted-foreground" />
-								<span className="text-muted-foreground">
-									Email:
-								</span>
-								<span className="font-medium">
-									{userProfileInfo?.email}
-								</span>
-							</div>
+			<CardContent className="p-y-6">
+				<h3 className="mb-4">Account Details</h3>
+				<div className="grid gap-4">
+					<div className="flex items-center space-x-3 text-sm">
+						<Mail className="h-4 w-4 text-muted-foreground" />
+						<span className="text-muted-foreground">Email:</span>
+						<span className="font-medium">
+							{userProfileInfo?.email}
+						</span>
+					</div>
 
-							<div className="flex items-center space-x-3 text-sm">
-								<Calendar className="h-4 w-4 text-muted-foreground" />
-								<span className="text-muted-foreground">
-									Member since:
-								</span>
-								<span className="font-medium">
-									{userProfileInfo?.created_at
-										? formatDate(userProfileInfo.created_at)
-										: "N/A"}
-								</span>
-							</div>
+					<div className="flex items-center space-x-3 text-sm">
+						<Calendar className="h-4 w-4 text-muted-foreground" />
+						<span className="text-muted-foreground">
+							Member since:
+						</span>
+						<span className="font-medium">
+							{userProfileInfo?.created_at
+								? formatDate(userProfileInfo.created_at)
+								: "N/A"}
+						</span>
+					</div>
 
-							{/* <div className="flex items-center space-x-3 text-sm">
+					{/* <div className="flex items-center space-x-3 text-sm">
 								<Clock className="h-4 w-4 text-muted-foreground" />
 								<span className="text-muted-foreground">
 									Last active:
@@ -81,19 +81,19 @@ export default function UserAccountDetailsCard({ userProfileInfo }: { userProfil
 								</span>
 							</div> */}
 
-							<div className="flex items-center space-x-3 text-sm">
-								<ImageIcon className="h-4 w-4 text-muted-foreground" />
-								<span className="text-muted-foreground">
-									Avatar Url:
-								</span>
-								<span className="font-medium">
-									{userProfileInfo?.avatar_url
-										? userProfileInfo.avatar_url
-										: "N/A"}
-								</span>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
-  )
+					<div className="flex items-center space-x-3 text-sm">
+						<ImageIcon className="h-4 w-4 text-muted-foreground" />
+						<span className="text-muted-foreground">
+							Avatar Url:
+						</span>
+						<span className="font-medium">
+							{userProfileInfo?.avatar_url
+								? userProfileInfo.avatar_url
+								: "N/A"}
+						</span>
+					</div>
+				</div>
+			</CardContent>
+		</Card>
+	);
 }

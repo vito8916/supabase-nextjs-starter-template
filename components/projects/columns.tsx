@@ -51,6 +51,8 @@ export const columns: ColumnDef<ProjectDTO>[] = [
         ),
         enableSorting: false,
         enableHiding: false,
+        size: 50,
+        maxSize: 50,
     },
     {
         accessorKey: "name",
