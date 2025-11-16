@@ -10,7 +10,7 @@ export default function ShowAdditionalSectionsToggle({}) {
 
 	return (
 		<>
-			<div className="flex items-center space-x-2">
+			<div className="flex items-center space-x-2 mb-4">
 				<Checkbox
 					id="show-additional-sections"
 					checked={showAdditionalSections}

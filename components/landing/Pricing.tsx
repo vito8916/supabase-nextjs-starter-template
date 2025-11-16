@@ -155,7 +155,7 @@ export const Pricing = () => {
 					variants={containerVariants}
 					initial="hidden"
 					whileInView="visible"
-					viewport={{ once: true, amount: 0.2 }}
+					viewport={{ once: true, amount: 0 }}
 				>
 					<div className="container mx-auto px-4">
 						<motion.div variants={headerVariants} className="max-w-2xl mx-auto text-center mb-16">
@@ -198,7 +198,7 @@ export const Pricing = () => {
 							</motion.div>
 						</motion.div>
 						<div className="flex flex-col lg:flex-row items-center mt-20 gap-8 lg:gap-6 w-full">
-							<motion.div variants={cardVariants}>
+							<motion.div variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0 }}>
 								<Card className="w-full px-4 mb-8 lg:mb-0 hover:shadow-lg transition-shadow duration-300">
 									<CardHeader>
 										<CardTitle>Beginner</CardTitle>
@@ -241,7 +241,7 @@ export const Pricing = () => {
 									</CardContent>
 								</Card>
 							</motion.div>
-							<motion.div variants={cardVariants}>
+							<motion.div variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0 }}>
 								<Card className="w-full px-4 mb-8 lg:mb-0 relative hover:shadow-lg transition-shadow duration-300">
 									<CardHeader>
 										<CardTitle>Standard</CardTitle>
@@ -292,7 +292,7 @@ export const Pricing = () => {
 									</CardContent>
 								</Card>
 							</motion.div>
-							<motion.div variants={cardVariants}>
+							<motion.div variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0 }}>
 								<Card className="w-full px-4 mb-8 lg:mb-0 hover:shadow-lg transition-shadow duration-300">
 									<CardHeader>
 										<CardTitle>Premium</CardTitle>

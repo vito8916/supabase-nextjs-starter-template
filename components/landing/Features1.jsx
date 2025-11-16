@@ -8,6 +8,7 @@ import preview from "@/public/assets/images/feature4.webp";
 
 
 import { CheckIcon } from "lucide-react";
+import { Badge } from "../ui/badge";
 
 const containerVariants = {
 	hidden: { opacity: 0 },
@@ -89,23 +90,23 @@ export const Features1 = () => {
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }}
+        viewport={{ once: true, amount: 0 }}
       >
         <div className="flex flex-wrap items-center 2xl:w-[1450px] xl:w-[1300px] w-11/12 mx-auto md:pl-4 xl:pr-16 xl:pl-16">
           <div className="w-full lg:w-1/2 mb-12 lg:mb-0">
             <div className="mx-auto lg:mx-auto w-11/12 sm:w-4/5 md:w-3/4 lg:w-unset">
-              <motion.span variants={itemVariants} className="block-subtitle">
-                Ship Faster
-              </motion.span>
+              <motion.div variants={itemVariants} className="block-subtitle">
+                <Badge variant="secondary">Ship Faster</Badge>
+              </motion.div>
               <motion.h2 variants={itemVariants} className="mt-6 mb-8 text-4xl lg:text-5xl block-big-title">
                 Everything you need to build modern web apps
               </motion.h2>
-              <motion.p variants={itemVariants} className="mb-10 text-muted-foreground leading-loose">
+              <motion.p variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0 }} className="mb-10 text-muted-foreground leading-loose">
                 Launch your next idea faster with SupaNext Starter Kit 2 - a modern boilerplate
                 powered by Next.js 16 and Supabase. Skip the setup headaches and focus on
                 building features that matter.
               </motion.p>
-              <motion.ul variants={listVariants} className="mb-6 text-foreground space-y-3">
+              <motion.ul variants={listVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0 }} className="mb-6 text-foreground space-y-3">
                 <motion.li variants={listItemVariants} className="flex items-center">
                   <CheckIcon className="size-4 mr-3 flex-shrink-0 text-green-500" />
                   <span>Complete authentication flow (sign up, sign in, password reset)</span>
@@ -129,9 +130,9 @@ export const Features1 = () => {
               </motion.ul>
             </div>
           </div>
-          <div className="w-3/4 mx-auto lg:w-1/2 flex flex-wrap lg:-mx-4 sm:pr-8 lg:pt-10 justify-center lg:pl-4 xl:px-8">
+          <div className="w-full mx-auto lg:w-1/2 flex flex-wrap lg:-mx-4 sm:pr-8 lg:pt-10 justify-center lg:pl-4 xl:px-8">
             <div className="mb-8 lg:mb-0 w-full sm:w-1/2 px-2 lg:px-0">
-              <motion.div variants={imageVariants} className="mb-4 py-3 pl-3 pr-2 rounded">
+              <motion.div variants={imageVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0 }} className="mb-4 py-3 pl-3 pr-2 rounded">
                 <Image
                   src={dashboard.src}
                   width={500}
@@ -141,7 +142,7 @@ export const Features1 = () => {
                   aria-label="Dashboard interface"
                 />
               </motion.div>
-              <motion.div variants={imageVariants} className="py-3 pl-3 pr-2 rounded">
+              <motion.div variants={imageVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0 }} className="py-3 pl-3 pr-2 rounded">
                 <Image
                   src={signup.src}
                   width={500}
@@ -152,8 +153,8 @@ export const Features1 = () => {
                 />
               </motion.div>
             </div>
-            <div className="w-1/2 lg:mt-20  pt-12 lg:pt-0 px-2 hidden sm:inline-block">
-              <motion.div variants={imageVariants} className="mb-4 py-3 pl-3 pr-2 rounded-lg">
+            <div className="w-full lg:mt-20  pt-12 lg:pt-0 px-2 sm:inline-block">
+              <motion.div variants={imageVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0 }} className="mb-4 py-3 pl-3 pr-2 rounded-lg">
                 <Image
                   src={bentoFeatures.src}
                   width={500}
@@ -163,7 +164,7 @@ export const Features1 = () => {
                   aria-label="Features overview"
                 />
               </motion.div>
-              <motion.div variants={imageVariants} className="py-3 pl-3 pr-2 rounded-lg">
+              <motion.div variants={imageVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0 }} className="py-3 pl-3 pr-2 rounded-lg">
                 <Image
                   src={preview.src}
                   width={500}
