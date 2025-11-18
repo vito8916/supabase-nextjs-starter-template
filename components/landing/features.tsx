@@ -39,7 +39,7 @@ function Features() {
 
     return (
         <section className="py-32">
-            <div className="container mx-auto">
+            <div className="container mx-auto px-4">
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 items-start">
                     {/* Header Section */}
                     <div className="md:col-span-2 lg:col-span-1 flex flex-col gap-6">

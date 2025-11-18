@@ -153,7 +153,7 @@ export const Features1 = () => {
                 />
               </motion.div>
             </div>
-            <div className="w-full lg:mt-20  pt-12 lg:pt-0 px-2 sm:inline-block">
+            <div className="w-full lg:w-1/2 lg:mt-20  pt-12 lg:pt-0 px-2 sm:inline-block">
               <motion.div variants={imageVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0 }} className="mb-4 py-3 pl-3 pr-2 rounded-lg">
                 <Image
                   src={bentoFeatures.src}
