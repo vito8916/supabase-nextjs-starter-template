@@ -2,14 +2,34 @@
 
 import { use } from "react";
 import { useRouter } from "next/navigation";
-import { columns } from "./columns";
-import { DataTable } from "./data-table";
+import { columns } from "@/components/projects/columns";
+import { DataTable } from "@/components/shared/ui/data-table/data-table";
 import { bulkDeleteProjectsAction } from "@/app/actions/projects/actions";
 import type { ProjectDTO } from "@/types/projects";
 
 interface ProjectsContentProps {
     projectsPromise: Promise<ProjectDTO[]>;
 }
+
+/* Faceted filters for the projects table */
+const facetedFilters = [
+    {
+        label: "Status",
+        value: "status",
+        options: [
+            { label: "Active", value: "active" },
+            { label: "Inactive", value: "inactive" },
+        ]
+    },
+    {
+        label: "Visibility",
+        value: "visibility",
+        options: [
+            { label: "Public", value: "public" },
+            { label: "Private", value: "private" },
+        ]
+    }
+]
 
 function ProjectsContent({ projectsPromise }: ProjectsContentProps) {
     const router = useRouter();
@@ -31,6 +51,7 @@ function ProjectsContent({ projectsPromise }: ProjectsContentProps) {
             onDelete={handleDelete}
             filterColumn="name"
             filterPlaceholder="Filter by name..."
+            facetedFilters={facetedFilters}
         />
     );
 }
