@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://supanext-starter-kit2.vercel.app'),
   title: "SupaNext Starter Kit 2",
   description: "A modern starter kit powered by Supabase and Next.js.",
   openGraph: {

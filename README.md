@@ -44,7 +44,12 @@ From that idea, Supanext Kit 2 was born: a ready-to-use template that reduces co
 
 ## Setup
 
-1) Install dependencies
+1) Clone the repository
+```bash
+git clone https://github.com/vito8916/supabase-nextjs-starter-template.git
+```
+
+1.1) Install dependencies
 ```bash
 npm install
 ```
