@@ -97,7 +97,7 @@ Required at runtime when enabling Supabase auth:
 - Behavior when env vars are present:
   - Unauthenticated users are redirected from protected routes to `/login`.
   - Authenticated users are redirected away from `/login` and `/sign-up` to `/dashboard`.
-- Public routes (current list): `/login`, `/sign-up`, `/forgot-password`, `/update-password`, `/sign-up-success`, `/error`, any path under `/auth`. The home route `/` is also treated as public by a special-case check.
+- Public routes (current list): `/login`, `/sign-up`, `/forgot-password`, `/update-password`, `/sign-up-success`, `/error`, any path under `/auth`. The home route `/` (served by `app/(landing)/page.tsx`) is also treated as public by a special-case check.
 - Matcher excludes: `_next/static`, `_next/image`, `favicon.ico`, and common image extensions.
 
 See:
@@ -157,10 +157,16 @@ Replace the email content with:
 High-level folders:
 ```
 app/
+  (landing)/              # Public marketing pages — Navbar + Footer layout
+    layout.tsx            # Landing layout (Navbar, main, Footer)
+    page.tsx              # Home / landing page
+  (auth)/                 # Auth pages — minimal centered layout
   (protected)/            # Authenticated-only layouts and pages (e.g., dashboard)
   actions/                # Server Actions (auth, settings, etc.)
-  page.tsx                # Landing / marketing page
+  layout.tsx              # Root layout (html, body, ThemeProvider, Toaster)
+  globals.css             # Tailwind v4 global styles and CSS variables
 components/
+  landing/                # Landing page sections (Navbar, Hero, Features, Pricing, Footer, …)
   auth/                   # Auth forms
   dashboard/              # Sidebar, nav, etc.
   settings/               # Profile / password forms
@@ -180,7 +186,7 @@ types/                    # TypeScript types
 
 ## Entry Points
 
-- App router root: `app/page.tsx`
+- Landing page: `app/(landing)/page.tsx`
 - Protected area example: `app/(protected)/dashboard/page.tsx`
 
 ## Development Notes

@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Pricing } from "./Pricing";
 import { Features1 } from "./Features1";
+import { Features } from "./features";
 export default function ShowAdditionalSectionsToggle({}) {
 	const [showAdditionalSections, setShowAdditionalSections] = useState<boolean>(false);
 
@@ -27,6 +28,7 @@ export default function ShowAdditionalSectionsToggle({}) {
 			<Activity mode={showAdditionalSections ? "visible" : "hidden"}>
                 <Features1 />
 				<Pricing />
+				<Features />
 			</Activity>
 		</>
 	);
