@@ -121,7 +121,7 @@ async function handleOAuth(provider: "github" | "google") {
 
 ### Step 7 — Test locally
 1. Ensure `NEXT_PUBLIC_SITE_URL=http://localhost:3002` in `.env.local`.
-2. Run `npm run dev` (exposes app at port 3002).
+2. Run `pnpm dev` (exposes app at port 3002).
 3. Navigate to `/login` or `/sign-up` and click GitHub.
 4. Approve on GitHub, you should be redirected back and land on `/dashboard`.
 

@@ -3,6 +3,7 @@
   "description": "This is a complete starter kit for SupaBase and Next.js. It includes complete authentication flow, database, a basic landing page, a basic dashboard skeleton, and more.",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.9.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

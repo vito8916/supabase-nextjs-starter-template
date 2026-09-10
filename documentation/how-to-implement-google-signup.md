@@ -118,7 +118,7 @@ async function handleOAuth(provider: "github" | "google") {
 
 ### Step 7 — Test locally
 1. Ensure `NEXT_PUBLIC_SITE_URL=http://localhost:3002` in `.env.local`.
-2. Run `npm run dev`.
+2. Run `pnpm dev`.
 3. Open `/login` or `/sign-up` and click Google.
 4. Complete consent; you should land on `/dashboard`.
 

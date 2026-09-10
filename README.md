@@ -39,7 +39,7 @@ From that idea, Supanext Kit 2 was born: a ready-to-use template that reduces co
 ## Requirements
 
 - Node.js 18+ (LTS recommended)
-- npm (repository includes `package-lock.json`)
+- pnpm (repository includes `pnpm-lock.yaml`)
 - A Supabase project (for auth)
 
 ## Setup
@@ -51,7 +51,7 @@ git clone https://github.com/vito8916/supabase-nextjs-starter-template.git
 
 1.1) Install dependencies
 ```bash
-npm install
+pnpm install
 ```
 
 2) Environment variables
@@ -70,19 +70,19 @@ Notes:
 
 5) Run the dev server
 ```bash
-npm run dev
+pnpm dev
 ```
 The app starts on http://localhost:3000 (Turbopack).
 
 ## Scripts
 
 Defined in `package.json`:
-- `npm run dev` – Next dev with Turbopack on port 3000
-- `npm run build` – Production build
-- `npm run start` – Start the production server
-- `npm run lint` – Lint with ESLint (flat config)
-- `npm run test` – Run Vitest once
-- `npm run test:watch` – Run Vitest in watch mode
+- `pnpm dev` – Next dev with Turbopack on port 3000
+- `pnpm build` – Production build
+- `pnpm start` – Start the production server
+- `pnpm lint` – Lint with ESLint (flat config)
+- `pnpm test` – Run Vitest once
+- `pnpm test:watch` – Run Vitest in watch mode
 
 ## Environment Variables
 
